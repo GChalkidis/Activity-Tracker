@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">MyApplication</string>
+    <string name="loginButtonText">Login</string>
+    <string name="usernameTitleText">Username</string>
+    <string name="signInTitleText">Sign In</string>
+    <string name="welcomeText">Welcome</string>
+    <string name="sendDataButtonText">Send Data</string>
+    <string name="leaderboardText">Leaderboard</string>
+    <string name="profileText">Profile</string>
+</resources>
