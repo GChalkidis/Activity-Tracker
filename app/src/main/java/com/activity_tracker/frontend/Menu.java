@@ -230,7 +230,7 @@ public class Menu extends AppCompatActivity {
             Log.e(TAG, "Now sending the file to the server");
 
             new Thread(() -> {
-                // TODO: Open a new socket and send the gpxData to the server
+                // TODO: Open a new socket and send the gpxData to the server.
                 GPXData gpxdata = new GPXData(fileData);
                 Socket connection = null;
                 ObjectOutputStream out = null;
