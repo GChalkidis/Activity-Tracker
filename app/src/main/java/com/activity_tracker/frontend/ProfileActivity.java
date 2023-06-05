@@ -6,10 +6,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.activity_tracker.backend.calculations.UserStatistics;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.IOException;
@@ -70,10 +73,11 @@ public class ProfileActivity extends AppCompatActivity
             Socket connection = null;
             ObjectOutputStream out = null;
             ObjectInputStream in = null;
+            UserStatistics userStatistics = null;
 
             try
             {
-                connection = new Socket("192.168.1.19", 5554);
+                connection = new Socket("192.168.1.19", 8890);
                 out = new ObjectOutputStream(connection.getOutputStream());
                 // Write the username to the server
                 out.writeObject(username);
@@ -85,7 +89,16 @@ public class ProfileActivity extends AppCompatActivity
 
                 // Receive the leaderboard data
                 Object object = in.readObject();
-                Log.d(TAG,object.toString());
+                if (object instanceof UserStatistics)
+                {
+                    userStatistics = (UserStatistics) object;
+
+                }
+                else
+                {
+                    throw new RuntimeException("Received object is not of type UserStatistics");
+                }
+
 
 
             }
@@ -94,10 +107,12 @@ public class ProfileActivity extends AppCompatActivity
                 // Handle exceptions
                 e.printStackTrace();
 
-            } catch (ClassNotFoundException e)
+            }
+            catch (ClassNotFoundException e)
             {
                 throw new RuntimeException(e);
-            } finally
+            }
+            finally
             {
                 // Close resources in the finally block
                 try
@@ -121,18 +136,50 @@ public class ProfileActivity extends AppCompatActivity
             }
 
 
+            final UserStatistics finalUserStatistics = userStatistics;
             handler.post(() ->
             {
                 // TODO: Update the UI with the profile data
+                updateUI(finalUserStatistics);
             });
 
         }).start();
     }
 
-    private void updateUI()
+    private void updateUI(UserStatistics finalUserStatistics)
     {
+        LinearLayout linearLayout = findViewById(R.id.profileStatsContainer);
+        View profileStats = getLayoutInflater().inflate(R.layout.profilestats,null);
+        linearLayout.addView(profileStats);
+
+        setProfileStats(finalUserStatistics);
+    }
+
+    private void setProfileStats(UserStatistics userStatistics)
+    {
+        TextView textViewRoutesRecorded = findViewById(R.id.textViewRoutesRecorded);
+        textViewRoutesRecorded.setText(String.valueOf(userStatistics.getRoutesRecorded()));
+
+        TextView textViewDistance = findViewById(R.id.textViewDistance);
+        textViewDistance.setText(String.format("%.2f", userStatistics.getTotalDistance()));
+
+        TextView textViewElevation = findViewById(R.id.textViewElevation);
+        textViewElevation.setText(String.format("%.2f", userStatistics.getTotalElevation()));
+
+        TextView textViewWorkoutTime = findViewById(R.id.textViewWorkoutTime);
+        textViewWorkoutTime.setText(String.format("%.2f", userStatistics.getTotalActivityTime()));
+
+        TextView textViewAverageDistance = findViewById(R.id.textViewAverageDistance);
+        textViewAverageDistance.setText(String.format("%.2f", userStatistics.getAverageDistance()));
+
+        TextView textViewAverageElevation = findViewById(R.id.textViewAverageElevation);
+        textViewAverageElevation.setText(String.format("%.2f", userStatistics.getAverageElevation()));
+
+        TextView textViewAverageWorkoutTime = findViewById(R.id.textViewAverageWorkoutTime);
+        textViewAverageWorkoutTime.setText(String.format("%.2f", userStatistics.getAverageActivityTime()));
 
     }
+
 
     @Override
     protected void onResume()
@@ -144,6 +191,16 @@ public class ProfileActivity extends AppCompatActivity
     protected void onPause()
     {
         super.onPause();
+    }
+
+    private void saveProfile()
+    {
+
+    }
+
+    private void loadProfile()
+    {
+
     }
 
 

@@ -7,4 +7,5 @@
     <string name="sendDataButtonText">Send Data</string>
     <string name="leaderboardText">Leaderboard</string>
     <string name="profileText">Profile</string>
+    <string name="not_applicable">N/A</string>
 </resources>

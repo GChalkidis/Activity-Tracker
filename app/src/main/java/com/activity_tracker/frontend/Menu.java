@@ -140,10 +140,6 @@ public class Menu extends AppCompatActivity {
         String savedUsername = mPrefs.getString("username", "");
         activityStats = gson.fromJson(json, ActivityStats.class);
         // Condition 1: A new user has logged in and there is no saved activity stats
-        // Condition 2: The user has logged in again and there are saved activity stats
-        // Condition 3 : The user just switched to another activity and came back to this one so load the activity stats and the username
-
-        // Condition 1: A new user has logged in and there is no saved activity stats
         if ((savedUsername != null && !savedUsername.equals(username)) && (username != null && !username.equals("") ))
         {
             Log.e(TAG, "No saved activity stats");

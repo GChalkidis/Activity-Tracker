@@ -66,7 +66,7 @@ public class LeaderboardActivity extends AppCompatActivity
 
             try
             {
-                connection = new Socket("192.168.1.19", 5554);
+                connection = new Socket("192.168.1.19", 8890);
                 out = new ObjectOutputStream(connection.getOutputStream());
                 // Write the username to the server
                 out.writeObject(username);
@@ -133,5 +133,15 @@ public class LeaderboardActivity extends AppCompatActivity
     protected void onPause()
     {
         super.onPause();
+    }
+
+    private void saveLeaderboards()
+    {
+
+    }
+
+    private void loadLeaderboards()
+    {
+
     }
 }
