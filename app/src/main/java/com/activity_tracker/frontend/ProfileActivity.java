@@ -181,27 +181,5 @@ public class ProfileActivity extends AppCompatActivity
     }
 
 
-    @Override
-    protected void onResume()
-    {
-        super.onResume();
-    }
-
-    @Override
-    protected void onPause()
-    {
-        super.onPause();
-    }
-
-    private void saveProfile()
-    {
-
-    }
-
-    private void loadProfile()
-    {
-
-    }
-
 
 }

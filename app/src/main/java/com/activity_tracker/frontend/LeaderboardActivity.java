@@ -118,30 +118,4 @@ public class LeaderboardActivity extends AppCompatActivity
         }).start();
     }
 
-    private void updateUI()
-    {
-
-    }
-
-    @Override
-    protected void onResume()
-    {
-        super.onResume();
-    }
-
-    @Override
-    protected void onPause()
-    {
-        super.onPause();
-    }
-
-    private void saveLeaderboards()
-    {
-
-    }
-
-    private void loadLeaderboards()
-    {
-
-    }
 }
