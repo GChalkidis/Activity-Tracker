@@ -8,4 +8,5 @@
     <string name="leaderboardText">Leaderboard</string>
     <string name="profileText">Profile</string>
     <string name="not_applicable">N/A</string>
+    <string name="select_route">Select Route</string>
 </resources>

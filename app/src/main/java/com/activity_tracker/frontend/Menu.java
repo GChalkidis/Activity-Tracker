@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -98,8 +99,8 @@ public class Menu extends AppCompatActivity {
         }
 
         handler = new Handler(Looper.getMainLooper());
-        Button sendDataButton = findViewById(R.id.sendData_button);
-        sendDataButton.setOnClickListener(v -> OpenFileChooser());
+        ImageView uploadData = findViewById(R.id.upload_data);
+        uploadData.setOnClickListener(v -> OpenFileChooser());
     }
 
     @Override

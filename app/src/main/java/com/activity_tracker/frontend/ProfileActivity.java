@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -39,7 +40,8 @@ public class ProfileActivity extends AppCompatActivity
         // Receive the username from the previous activity
         Intent intent = getIntent();
         this.username = intent.getStringExtra("username");
-
+        TextView usernameTextView = findViewById(R.id.profileText);
+        usernameTextView.setText("Profile\n\n" + "Statistics for " + username);
         this.handler = new Handler(Looper.getMainLooper());
 
 
@@ -89,6 +91,7 @@ public class ProfileActivity extends AppCompatActivity
 
                 // Receive the leaderboard data
                 Object object = in.readObject();
+                Log.e(TAG, "onCreate: " + object.getClass().getName());
                 if (object instanceof UserStatistics)
                 {
                     userStatistics = (UserStatistics) object;
@@ -149,11 +152,26 @@ public class ProfileActivity extends AppCompatActivity
     private void updateUI(UserStatistics finalUserStatistics)
     {
         LinearLayout linearLayout = findViewById(R.id.profileStatsContainer);
-        View profileStats = getLayoutInflater().inflate(R.layout.profilestats,null);
-        linearLayout.addView(profileStats);
+        TextView noStatsTextView = findViewById(R.id.noStatsTextView);
 
-        setProfileStats(finalUserStatistics);
+        if (finalUserStatistics != null)
+        {
+            // UserStatistics object is not null, inflate and add the profile stats view
+            View profileStats = getLayoutInflater().inflate(R.layout.profilestats, null);
+            linearLayout.addView(profileStats);
+
+            setProfileStats(finalUserStatistics);
+            noStatsTextView.setVisibility(View.GONE);
+        } else
+        {
+            Log.e(TAG, "updateUI: UserStatistics object is null");
+            // UserStatistics object is null, display the "No statistics available" message
+            noStatsTextView.setVisibility(View.VISIBLE);
+        }
     }
+
+
+
 
     private void setProfileStats(UserStatistics userStatistics)
     {

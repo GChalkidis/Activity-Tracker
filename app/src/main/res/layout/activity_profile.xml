@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#E7E3ED"
     tools:context=".frontend.ProfileActivity">
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -14,7 +15,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/bottom_nav_menu"/>
+        app:menu="@menu/bottom_nav_menu" />
 
     <TextView
         android:id="@+id/profileText"
@@ -22,25 +23,31 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
         android:layout_marginTop="32dp"
-        android:textSize="24sp"
         android:text="@string/profileText"
+        android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
 
     <LinearLayout
         android:id="@+id/profileStatsContainer"
         android:layout_width="409dp"
         android:layout_height="497dp"
-        android:layout_marginTop="92dp"
+        android:layout_marginTop="128dp"
         android:orientation="vertical"
         android:padding="16dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <TextView
+            android:id="@+id/noStatsTextView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="No statistics available"
+            android:textSize="20sp"
+            android:visibility="gone" />
     </LinearLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
