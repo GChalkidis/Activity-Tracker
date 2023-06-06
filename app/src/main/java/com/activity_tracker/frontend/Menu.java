@@ -3,7 +3,6 @@ package com.activity_tracker.frontend;
 import com.activity_tracker.R;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -35,14 +34,11 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.Properties;
-
 
 public class Menu extends AppCompatActivity {
     private static final String TAG = "MENU";
@@ -65,7 +61,8 @@ public class Menu extends AppCompatActivity {
             if (R.id.home == id)
             {
                 return true;
-            } else if (R.id.profile == id)
+            }
+            else if (R.id.profile == id)
             {
                 Intent intent = new Intent(this, ProfileActivity.class);
                 intent.putExtra("username", username);
@@ -73,7 +70,8 @@ public class Menu extends AppCompatActivity {
                 overridePendingTransition(R.anim.slide_right, R.anim.slide_left);
                 finish();
                 return true;
-            } else if (R.id.leaderboard == id)
+            }
+            else if (R.id.leaderboard == id)
             {
                 Intent intent = new Intent(this, LeaderboardActivity.class);
                 intent.putExtra("username", username);
@@ -140,17 +138,17 @@ public class Menu extends AppCompatActivity {
         // Check if the username that was saved is the same as the one that is currently logged in
         String savedUsername = mPrefs.getString("username", "");
         activityStats = gson.fromJson(json, ActivityStats.class);
+
         // Condition 1: A new user has logged in and there is no saved activity stats
-        if ((savedUsername != null && !savedUsername.equals(username)) && (username != null && !username.equals("") ))
+        if (savedUsername != null && !savedUsername.equals(username) && (username != null && !username.equals("") ))
         {
             Log.e(TAG, "No saved activity stats");
-            this.username = username;
             activityStats = null;
             return;
         }
 
         // Condition 2: The user has logged in again and there are saved activity stats
-        if (savedUsername != null && savedUsername.equals(username) && (username != null && !username.equals("")))
+        if (savedUsername != null && savedUsername.equals(username) && !username.equals(""))
         {
             Log.e(TAG, "Loading saved activity stats");
             this.username = savedUsername;
@@ -159,7 +157,7 @@ public class Menu extends AppCompatActivity {
         }
 
         // Condition 3: The user just switched to another activity and came back to this one, so load the activity stats and the username
-        if (savedUsername != null && (username == null))
+        if (savedUsername != null && username == null)
         {
             Log.e(TAG, "Loading from previous view activity stats");
             this.username = savedUsername;
@@ -216,8 +214,10 @@ public class Menu extends AppCompatActivity {
     {
         super.onActivityResult(REQUEST_CODE, RESULT_CODE, data);
 
-        if (RESULT_CODE == Activity.RESULT_OK) {
-            if (data == null) {
+        if (RESULT_CODE == Activity.RESULT_OK)
+        {
+            if (data == null)
+            {
                 return;
             }
             Uri uri = data.getData();
@@ -250,22 +250,34 @@ public class Menu extends AppCompatActivity {
 
                     // Process the received stats here
 
-                } catch (IOException | ClassNotFoundException e) {
+                }
+                catch (IOException | ClassNotFoundException e)
+                {
                     // Handle exceptions
                     e.printStackTrace();
-                } finally {
+                }
+                finally
+                {
                     // Close resources in the finally block
-                    try {
-                        if (in != null) {
+                    try
+                    {
+                        if (in != null)
+                        {
                             in.close();
                         }
-                        if (out != null) {
+
+                        if (out != null)
+                        {
                             out.close();
                         }
-                        if (connection != null) {
+
+                        if (connection != null)
+                        {
                             connection.close();
                         }
-                    } catch (IOException e) {
+                    }
+                    catch (IOException e)
+                    {
                         e.printStackTrace();
                     }
                 }
@@ -295,7 +307,8 @@ public class Menu extends AppCompatActivity {
 
     private byte[] getFileDataFromUri(Uri uri)
     {
-        try {
+        try
+        {
             InputStream inputStream = getContentResolver().openInputStream(uri);
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
@@ -306,7 +319,9 @@ public class Menu extends AppCompatActivity {
             }
             return outputStream.toByteArray();
 
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             return null;
         }
     }
