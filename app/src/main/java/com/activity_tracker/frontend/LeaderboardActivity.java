@@ -4,16 +4,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import com.activity_tracker.R;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.activity_tracker.backend.calculations.SegmentLeaderboard;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 
 
 public class LeaderboardActivity extends AppCompatActivity
@@ -63,6 +66,7 @@ public class LeaderboardActivity extends AppCompatActivity
             Socket connection = null;
             ObjectOutputStream out = null;
             ObjectInputStream in = null;
+            ArrayList<SegmentLeaderboard> leaderboards = null;
 
             try
             {
@@ -76,6 +80,13 @@ public class LeaderboardActivity extends AppCompatActivity
 
                 // Receive the leaderboard data
                 Object object = in.readObject();
+
+                // if the object is an ArrayList of SegmentLeaderboards, then cast it to that type
+                // else, the leaderboards is null and will be handled in the updateUI method
+                if (object instanceof ArrayList)
+                {
+                    leaderboards = (ArrayList<SegmentLeaderboard>) object;
+                }
 
 
             }
@@ -110,12 +121,26 @@ public class LeaderboardActivity extends AppCompatActivity
                 }
             }
 
+            ArrayList<SegmentLeaderboard> finalLeaderboards = leaderboards;
             handler.post(() ->
             {
                 // TODO: Update the UI with the leaderboard data
+                updateUI(finalLeaderboards);
             });
 
         }).start();
+    }
+
+    private void updateUI(ArrayList<SegmentLeaderboard> leaderboards)
+    {
+        if (leaderboards != null)
+        {
+        }
+        else
+        {
+            // TODO: Display a message to the user that there are no leaderboards
+        }
+
     }
 
 }
