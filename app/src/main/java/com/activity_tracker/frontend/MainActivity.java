@@ -30,8 +30,6 @@ public class MainActivity extends AppCompatActivity
 
         loginButton.setOnClickListener(v ->
         {
-            // TODO: In a new thread open a socket to the backend and verify the username
-            // TODO: On the handler post a runnable to launch the menu activity
             new Thread(() ->
             {
                 TextView usernameTextView = (TextView) findViewById(R.id.username_title);
