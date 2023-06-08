@@ -227,12 +227,11 @@ public class Menu extends AppCompatActivity {
             Log.e(TAG, "Now sending the file to the server");
 
             new Thread(() -> {
-                // TODO: Open a new socket and send the gpxData to the server.
                 GPXData gpxdata = new GPXData(fileData);
                 Socket connection = null;
                 ObjectOutputStream out = null;
                 ObjectInputStream in = null;
-                final ActivityStats[] stats = new ActivityStats[1];
+                ActivityStats stats = null;
 
                 try
                 {
@@ -246,7 +245,7 @@ public class Menu extends AppCompatActivity {
                     out.flush();
 
                     in = new ObjectInputStream(connection.getInputStream());
-                    stats[0] = (ActivityStats) in.readObject();
+                    stats = (ActivityStats) in.readObject();
 
                     // Process the received stats here
 
@@ -282,9 +281,7 @@ public class Menu extends AppCompatActivity {
                     }
                 }
 
-                final ActivityStats finalStats = stats[0];
-                activityStats = finalStats;
-
+                final ActivityStats finalStats = stats;
                 handler.post(() ->
                 {
                     // Creating a notification to inform the user that the data is ready

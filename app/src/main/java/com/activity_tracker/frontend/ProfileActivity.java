@@ -142,7 +142,6 @@ public class ProfileActivity extends AppCompatActivity
             final UserStatistics finalUserStatistics = userStatistics;
             handler.post(() ->
             {
-                // TODO: Update the UI with the profile data
                 updateUI(finalUserStatistics);
             });
 
