@@ -1,8 +1,8 @@
 package com.activity_tracker.backend.calculations;
 
-import android.annotation.SuppressLint;
-
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.TreeSet;
 
 /**
@@ -13,6 +13,10 @@ public class SegmentLeaderboard implements Serializable
 {
     // statistics: A TreeSet of UserSegmentStatistics, sorted by the UserSegmentStatistics' time
     private final TreeSet<UserSegmentStatistics> statistics;
+
+    // users: HashSet that contains the usernames that have registered statistics for this leaderboard's segment
+    private final HashSet<String> users;
+
     // fileName: The name of the file this segment was extracted from
     private final String fileName;
 
@@ -24,6 +28,7 @@ public class SegmentLeaderboard implements Serializable
     public SegmentLeaderboard(String fileName)
     {
         this.statistics = new TreeSet<>();
+        this.users = new HashSet<>();
         this.fileName = fileName;
     }
 
@@ -35,6 +40,7 @@ public class SegmentLeaderboard implements Serializable
     public void registerSegmentStatistics(UserSegmentStatistics userSegmentStatistics)
     {
         this.statistics.add(userSegmentStatistics);
+        this.users.add(userSegmentStatistics.getUsername());
     }
 
     /**
@@ -50,6 +56,17 @@ public class SegmentLeaderboard implements Serializable
     {
         int fileTypeIndex = fileName.trim().indexOf(".gpx");
         return fileName.substring(0, fileTypeIndex);
+    }
+
+    /**
+     * containsUser: Used to check whether a user has registered statistics associated with a segment.
+     *
+     * @param user: The username
+     * @return true if the users HashSet contains the username.
+     */
+    public boolean containsUser(String user)
+    {
+        return this.users.contains(user);
     }
 
     /**

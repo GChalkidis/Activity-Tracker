@@ -34,6 +34,11 @@ public class LeaderboardActivity extends AppCompatActivity
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setSelectedItemId(R.id.leaderboard);
 
+        // Receive the username from the previous activity
+        Intent intent = getIntent();
+        this.username = intent.getStringExtra("username");
+        Log.e(TAG, "Username: " + username);
+
         handler = new Handler(Looper.getMainLooper());
 
         bottomNavigationView.setOnItemSelectedListener(item ->
@@ -48,7 +53,9 @@ public class LeaderboardActivity extends AppCompatActivity
             }
             else if (R.id.profile == id)
             {
-                startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+                Intent i = new Intent(this, ProfileActivity.class);
+                i.putExtra("username", username);
+                startActivity(i);
                 overridePendingTransition(R.anim.slide_right, R.anim.slide_left);
                 finish();
                 return true;
@@ -74,10 +81,13 @@ public class LeaderboardActivity extends AppCompatActivity
                 out = new ObjectOutputStream(connection.getOutputStream());
                 // Write the username to the server
                 out.writeObject(username);
+                out.flush();
                 // Request the leaderboard data
                 out.writeObject("LEADERBOARD");
-                in = new ObjectInputStream(connection.getInputStream());
+                out.flush();
 
+
+                in = new ObjectInputStream(connection.getInputStream());
                 // Receive the leaderboard data
                 Object object = in.readObject();
 
@@ -88,18 +98,21 @@ public class LeaderboardActivity extends AppCompatActivity
                     leaderboards = (ArrayList<SegmentLeaderboard>) object;
                 }
 
-
             }
             catch (IOException e)
             {
+                Log.e(TAG, "Error connecting to server");
+                Log.e(TAG, e.getMessage());
                 e.printStackTrace();
             }
             catch (ClassNotFoundException e)
             {
+                Log.e(TAG, "Error casting object to ArrayList<SegmentLeaderboard>");
                 throw new RuntimeException(e);
             }
             finally
             {
+                Log.e(TAG, "Closing resources");
                 // Close resources in the finally block
                 try
                 {
@@ -135,6 +148,7 @@ public class LeaderboardActivity extends AppCompatActivity
     {
         if (leaderboards != null)
         {
+
         }
         else
         {

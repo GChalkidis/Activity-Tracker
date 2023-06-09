@@ -35,15 +35,12 @@ public class MainActivity extends AppCompatActivity
                 TextView usernameTextView = (TextView) findViewById(R.id.username_title);
                 String username = usernameTextView.getText().toString().toLowerCase();
 
-                Log.d(TAG, "onClick: Username: " + username);
             }).start();
 
             Log.d(TAG, "onClick: Login button clicked");
             // Create a new socket to connect to the backend and verify the username
             TextView usernameTextView = (TextView) findViewById(R.id.username_title);
             String username = usernameTextView.getText().toString().toLowerCase();
-
-            Log.d(TAG, "onClick: Username: " + username);
 
             launchMenuActivity(username);
 

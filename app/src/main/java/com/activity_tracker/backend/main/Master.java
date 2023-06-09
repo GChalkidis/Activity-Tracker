@@ -4,7 +4,6 @@ import com.activity_tracker.backend.parser.GPXParser;
 import com.activity_tracker.backend.parser.Route;
 import com.activity_tracker.backend.parser.Segment;
 
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -42,7 +41,7 @@ public class Master
             config.load(new FileInputStream("config.properties"));
 
             final int WORKER_PORT = Integer.parseInt(config.getProperty("worker_port"));
-            final int CLIENT_PORT = Integer.parseInt(config.getProperty("user_port"));
+            final int CLIENT_PORT = Integer.parseInt(config.getProperty("client_port"));
 
             maxWorkers = Integer.parseInt(config.getProperty("number_of_workers"));
 
