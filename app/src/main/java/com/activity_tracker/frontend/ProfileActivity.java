@@ -61,7 +61,9 @@ public class ProfileActivity extends AppCompatActivity
             }
             else if (R.id.leaderboard == id)
             {
-                startActivity(new Intent(getApplicationContext(), LeaderboardActivity.class));
+                Intent i = new Intent(this, LeaderboardActivity.class);
+                i.putExtra("username", username);
+                startActivity(i);
                 overridePendingTransition(R.anim.slide_right, R.anim.slide_left);
                 finish();
                 return true;
