@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity
 {
+    // Tag for logging
     private static final String TAG = "MainActivity";
     private Handler handler;
 

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/distance_item"
+            android:icon="@drawable/gpx_distance"
+            android:title="Distance">
+        </item>
+
+        <item
+            android:id="@+id/elevation_item"
+            android:icon="@drawable/gpx_climb"
+            android:title="Elevation">
+        </item>
+
+        <item
+            android:id="@+id/activity_time_item"
+            android:icon="@drawable/gpx_speedometer"
+            android:title="Activity Time">
+        </item>
+    </group>
+
+</menu>
+

@@ -14,10 +14,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.*;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Properties;
-import java.util.TreeSet;
+import java.util.*;
 
 /* Statistics: The class that will be in charge of handling all the related statistics.
  * Will maintain a hashmap of users-UserStatistics, a counter of the routes recorded,
@@ -36,7 +33,7 @@ public class Statistics implements Serializable
     private final HashMap<String, UserStatistics> userStats;
 
     // segmentStatistics: Matches the hashcode (integer) of a segment name, to a leaderboard of user stats for that segment
-    private final HashMap<Integer, SegmentLeaderboard> segmentStatistics = new HashMap<>();
+    private HashMap<Integer, SegmentLeaderboard> segmentStatistics = new HashMap<>();
 
     /**
      * Initializes a new instance of the Statistics class.
@@ -53,6 +50,23 @@ public class Statistics implements Serializable
         if (fileExists())
         {
             loadStats();
+        }
+    }
+
+    public Statistics(Statistics other) {
+        this.routesRecorded = other.routesRecorded;
+        this.totalDistance = other.totalDistance;
+        this.totalElevation = other.totalElevation;
+        this.totalActivityTime = other.totalActivityTime;
+
+        // Copy the userStats hashmap
+        this.userStats = new HashMap<>(other.userStats);
+
+        // Copy the segmentStatistics hashmap
+        this.segmentStatistics = new HashMap<>(other.segmentStatistics.size());
+        for (Map.Entry<Integer, SegmentLeaderboard> entry : other.segmentStatistics.entrySet()) {
+            SegmentLeaderboard leaderboard = new SegmentLeaderboard(entry.getValue().getTrimmedFileName());
+            this.segmentStatistics.put(entry.getKey(), leaderboard);
         }
     }
 
