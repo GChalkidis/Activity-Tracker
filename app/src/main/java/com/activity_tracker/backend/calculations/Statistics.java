@@ -23,7 +23,7 @@ import java.util.*;
 public class Statistics implements Serializable
 {
     // The total number of routes recorded,
-    // as well as the total distance, elevation and activity time across all users.
+    private static final long serialVersionUID = 1L;
     private int routesRecorded;
     private double totalDistance;
     private double totalElevation;
@@ -53,7 +53,8 @@ public class Statistics implements Serializable
         }
     }
 
-    public Statistics(Statistics other) {
+    public Statistics(Statistics other)
+    {
         this.routesRecorded = other.routesRecorded;
         this.totalDistance = other.totalDistance;
         this.totalElevation = other.totalElevation;
@@ -104,6 +105,7 @@ public class Statistics implements Serializable
             }
             // If the leaderboard for that segment already exists, we register the segment statistics for that user
             SegmentLeaderboard leaderboard = segmentStatistics.get(segmentHashID);
+            assert leaderboard != null;
             leaderboard.registerSegmentStatistics(new UserSegmentStatistics(segmentHashID, user, segment.getTime()));
         }
     }
@@ -309,6 +311,7 @@ public class Statistics implements Serializable
                 Element userElement = doc.createElement("User");
                 userElement.setAttribute("Username", user);
                 userElement.setIdAttribute("Username", true);
+                assert statisticsForUser != null;
                 userElement.setAttribute("Routes_Recorded", String.valueOf(statisticsForUser.getRoutesRecorded()));
                 userElement.setAttribute("Total_Distance", String.valueOf(statisticsForUser.getTotalDistance()));
                 userElement.setAttribute("Total_Elevation", String.valueOf(statisticsForUser.getTotalElevation()));
@@ -321,6 +324,7 @@ public class Statistics implements Serializable
             for (Integer segmentHash : segmentStatistics.keySet())
             {
                 SegmentLeaderboard statisticsForSegment = segmentStatistics.get(segmentHash);
+                assert statisticsForSegment != null;
                 TreeSet<UserSegmentStatistics> userStatistics = statisticsForSegment.getLeaderboard();
                 String segmentName = statisticsForSegment.getTrimmedFileName();
 
@@ -412,45 +416,6 @@ public class Statistics implements Serializable
         return this;
     }
 
-    /**
-     * Calculates and returns the average distance recorded across all users.
-     * @throws RuntimeException If no routes have been recorded yet.
-     */
-    public double getAverageDistance()
-    {
-        if (routesRecorded == 0)
-        {
-            throw new RuntimeException("No routes have been recorded yet.");
-        }
-        return totalDistance / routesRecorded;
-    }
-
-    /**
-     * Calculates and returns the average elevation recorded across all users.
-     * @throws RuntimeException If no routes have been recorded yet.
-     */
-    public double getAverageElevation()
-    {
-        if (routesRecorded == 0)
-        {
-            throw new RuntimeException("No routes have been recorded yet.");
-        }
-        return totalElevation / routesRecorded;
-    }
-
-    /**
-     * Calculates and returns the average Activity Time recorded across all users.
-     * @throws RuntimeException If no routes have been recorded yet.
-     */
-    public double getAverageActivityTime()
-    {
-        if (routesRecorded == 0)
-        {
-            throw new RuntimeException("No routes have been recorded yet.");
-        }
-        return totalActivityTime / routesRecorded;
-    }
-
 
     /**
      * Calculates the average distance for a specific user by dividing their total distance by the number of routes they have
@@ -506,6 +471,49 @@ public class Statistics implements Serializable
         return userStats.get(user).getAverageActivityTime();
     }
 
+    public double getAverageDistances()
+    {
+        if (userStats.size() == 0)
+        {
+            return 0;
+        }
+        double total = 0;
+        for (UserStatistics user : userStats.values())
+        {
+            total += user.getTotalDistance();
+        }
+        return total / userStats.size();
+    }
+
+    public double getAverageElevations()
+    {
+        if (userStats.size() == 0)
+        {
+            return 0;
+        }
+        double total = 0;
+        for (UserStatistics user : userStats.values())
+        {
+            total += user.getTotalElevation();
+        }
+        return total / userStats.size();
+    }
+
+    public double getAverageActivityTimes()
+    {
+        if (userStats.size() == 0)
+        {
+            return 0;
+        }
+        double total = 0;
+        for (UserStatistics user : userStats.values())
+        {
+            total += user.getTotalActivityTime();
+        }
+        return total / userStats.size();
+    }
+
+
     /**
      * getSegmentLeaderboardsForUser: Used to get all the segment leaderboards associated with a user.
      * @param user: The user for whom to fetch the leaderboards.
@@ -533,9 +541,9 @@ public class Statistics implements Serializable
         return "+---------------------------------------------+\n" +
                 "|       Statistics across all users           |\n" +
                 "+-------------------+-------------------------+\n" +
-                String.format("| %-17s | %20.2f km |\n", "Average Distance", getAverageDistance()) +
-                String.format("| %-17s | %20.2f m  |\n", "Average Elevation", getAverageElevation()) +
-                String.format("| %-17s | %19.2f min |\n", "Avg Workout Time", getAverageActivityTime()) +
+                String.format("| %-17s | %20.2f km |\n", "Average Distance", getAverageDistances()) +
+                String.format("| %-17s | %20.2f m  |\n", "Average Elevation", getAverageElevations()) +
+                String.format("| %-17s | %19.2f min |\n", "Avg Workout Time", getAverageActivityTimes()) +
                 "+-------------------+-------------------------+\n";
     }
 
