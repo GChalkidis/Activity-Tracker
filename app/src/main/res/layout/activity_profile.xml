@@ -15,17 +15,25 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="#E7E3ED"
             android:orientation="vertical">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="#E7E3ED"
                 android:elevation="3dp"
-                app:titleTextColor="@color/black"
-                android:background="#E7E3ED">
+                app:titleTextColor="@color/black">
 
             </androidx.appcompat.widget.Toolbar>
+
+            <TextView
+                android:id="@+id/profileText"
+                android:layout_width="210dp"
+                android:layout_height="wrap_content"
+                android:text="@string/profileText"
+                android:textSize="24sp" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -42,22 +50,11 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:menu="@menu/bottom_nav_menu" />
 
-                <TextView
-                    android:id="@+id/profileText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="25dp"
-                    android:layout_marginTop="32dp"
-                    android:text="@string/profileText"
-                    android:textSize="24sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
                 <LinearLayout
                     android:id="@+id/profileStatsContainer"
                     android:layout_width="409dp"
                     android:layout_height="497dp"
-                    android:layout_marginTop="128dp"
+                    android:layout_marginTop="28dp"
                     android:orientation="vertical"
                     android:padding="16dp"
                     app:layout_constraintEnd_toEndOf="parent"

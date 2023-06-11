@@ -31,7 +31,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.activity_tracker.frontend.Menu"
+            android:name="com.activity_tracker.frontend.MenuActivity"
             android:label="Menu Activity" />
     </application>
 
