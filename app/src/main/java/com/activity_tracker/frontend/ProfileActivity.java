@@ -7,15 +7,22 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.activity_tracker.backend.calculations.UserStatistics;
+import com.activity_tracker.frontend.fragments.ActivityTimeFragment;
+import com.activity_tracker.frontend.fragments.DistanceFragment;
+import com.activity_tracker.frontend.fragments.ElevationFragment;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -24,25 +31,22 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.activity_tracker.backend.calculations.Statistics;
-import com.activity_tracker.backend.calculations.UserStatistics;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
 public class ProfileActivity extends AppCompatActivity
 {
     private static final String TAG = "ProfileActivity";
-
+    private String username;
+    private Handler handler;
     private DrawerLayout drawerLayout;
     private Toolbar toolbar;
     private NavigationView navigationView;
-    private String username;
-    private Handler handler;
-
     private Statistics statistics = null;
 
     @Override
@@ -54,13 +58,12 @@ public class ProfileActivity extends AppCompatActivity
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setSelectedItemId(R.id.profile);
 
-        // Receive the username from the previous activity.
+        // Receive the username from the previous activity
         Intent intent = getIntent();
         this.username = intent.getStringExtra("username");
         TextView usernameTextView = findViewById(R.id.profileText);
-        usernameTextView.setText("Profile\n\n" + "Statistics for " + username);
+        usernameTextView.setText("Profile " + username);
         this.handler = new Handler(Looper.getMainLooper());
-
         toolbar = findViewById(R.id.toolbar);
         drawerLayout = findViewById(R.id.drawerLayout);
         navigationView = findViewById(R.id.navigationView);
@@ -71,30 +74,36 @@ public class ProfileActivity extends AppCompatActivity
         toggle.syncState();
         toggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.black));
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item)
-            {
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 final int id = item.getItemId();
-                if (R.id.activity_time_item == id)
-                {
+                if (R.id.activity_time_item == id) {
                     drawerLayout.closeDrawer(GravityCompat.START);
                     Toast.makeText(ProfileActivity.this, "Activity Time", Toast.LENGTH_SHORT).show();
-                    fragmentR(new ActivityTimeFragment());
+
+                    // Pass the statistics variable to the fragment
+                    Fragment activityTimeFragment = ActivityTimeFragment.newInstance(statistics,ActivityTimeFragment.class,username);
+                    fragmentR(activityTimeFragment);
                 }
                 if (R.id.elevation_item == id)
                 {
                     drawerLayout.closeDrawer(GravityCompat.START);
                     Toast.makeText(ProfileActivity.this, "Elevation Time", Toast.LENGTH_SHORT).show();
-                    fragmentR(new ElevationFragment());
+
+                    // Pass the statistics variable to the fragment
+                    Fragment elevationFragment = ElevationFragment.newInstance(statistics, ElevationFragment.class,username);
+                    fragmentR(elevationFragment);
                 }
-                if (R.id.distance_item == id)
-                {
+                if (R.id.distance_item == id) {
                     drawerLayout.closeDrawer(GravityCompat.START);
                     Toast.makeText(ProfileActivity.this, "Distance Time", Toast.LENGTH_SHORT).show();
-                    fragmentR(new DistanceFragment());
+
+                    // Pass the statistics variable to the fragment
+                    Fragment distanceFragment = DistanceFragment.newInstance(statistics, DistanceFragment.class,username);
+                    fragmentR(distanceFragment);
                 }
                 return false;
             }
+
         });
 
         bottomNavigationView.setOnItemSelectedListener(item ->
@@ -102,7 +111,7 @@ public class ProfileActivity extends AppCompatActivity
             final int id = item.getItemId();
             if (R.id.home == id)
             {
-                startActivity(new Intent(getApplicationContext(), Menu.class));
+                startActivity(new Intent(getApplicationContext(), MenuActivity.class));
                 overridePendingTransition(R.anim.slide_right, R.anim.slide_left);
                 finish();
                 return true;
@@ -129,6 +138,7 @@ public class ProfileActivity extends AppCompatActivity
             Socket connection = null;
             ObjectOutputStream out = null;
             ObjectInputStream in = null;
+
             try
             {
                 connection = new Socket("192.168.1.19", 8890);
@@ -143,7 +153,6 @@ public class ProfileActivity extends AppCompatActivity
                 in = new ObjectInputStream(connection.getInputStream());
 
                 Object object = in.readObject();
-                Log.e(TAG, "onCreate: " + object.getClass().getName());
                 if (object instanceof Statistics)
                 {
                     Log.e(TAG, "onCreate: " + "Received statistics");
@@ -153,44 +162,20 @@ public class ProfileActivity extends AppCompatActivity
                 {
                     throw new RuntimeException("Received object is not of type UserStatistics");
                 }
+
                 Log.e(TAG, "onCreate: " + "???");
-
-
+            }
+            catch (UnknownHostException e)
+            {
+                throw new RuntimeException(e);
             }
             catch (IOException e)
             {
-                // Handle exceptions
-                Log.e(TAG, e.getMessage());
-                e.printStackTrace();
-
+                throw new RuntimeException(e);
             }
             catch (ClassNotFoundException e)
             {
-                Log.e(TAG, e.getMessage());
-
                 throw new RuntimeException(e);
-            }
-            finally
-            {
-                // Close resources in the finally block
-                try
-                {
-                    if (in != null)
-                    {
-                        in.close();
-                    }
-                    if (out != null)
-                    {
-                        out.close();
-                    }
-                    if (connection != null)
-                    {
-                        connection.close();
-                    }
-                } catch (IOException e)
-                {
-                    e.printStackTrace();
-                }
             }
             Log.e(TAG, "onCreate: " + username);
             final UserStatistics finalUserStatistics = statistics.getUserStats(username);
@@ -217,6 +202,7 @@ public class ProfileActivity extends AppCompatActivity
     }
 
 
+
     private void updateUI(UserStatistics finalUserStatistics)
     {
         LinearLayout linearLayout = findViewById(R.id.profileStatsContainer);
@@ -237,7 +223,6 @@ public class ProfileActivity extends AppCompatActivity
             noStatsTextView.setVisibility(View.VISIBLE);
         }
     }
-
 
 
 
@@ -269,3 +254,4 @@ public class ProfileActivity extends AppCompatActivity
 
 
 }
+

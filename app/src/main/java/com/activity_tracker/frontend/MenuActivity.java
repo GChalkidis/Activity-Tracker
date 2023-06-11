@@ -18,7 +18,6 @@ import android.os.Looper;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -40,7 +39,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-public class Menu extends AppCompatActivity {
+public class MenuActivity extends AppCompatActivity {
     private static final String TAG = "MENU";
     private Handler handler;
     private String username;
@@ -340,7 +339,7 @@ public class Menu extends AppCompatActivity {
         }
 
         // Build the notification
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(Menu.this, "channelData")
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(MenuActivity.this, "channelData")
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setContentTitle("Data Ready")
                 .setContentText("The data is ready for " + usernameString)
@@ -348,8 +347,8 @@ public class Menu extends AppCompatActivity {
         Notification notification = builder.build();
 
         // Get permission to post the notification
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(Menu.this);
-        if (ActivityCompat.checkSelfPermission(Menu.this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(MenuActivity.this);
+        if (ActivityCompat.checkSelfPermission(MenuActivity.this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
         // Post the notification

@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity
 
     private void launchMenuActivity(String username)
     {
-        Intent intent = new Intent(this, Menu.class);
+        Intent intent = new Intent(this, MenuActivity.class);
         intent.putExtra("username", username);
         // Popup message to show that the login is successful
         Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show();

@@ -46,7 +46,7 @@ public class LeaderboardActivity extends AppCompatActivity
             final int id = item.getItemId();
             if (R.id.home == id)
             {
-                startActivity(new Intent(getApplicationContext(), Menu.class));
+                startActivity(new Intent(getApplicationContext(), MenuActivity.class));
                 overridePendingTransition(R.anim.slide_right, R.anim.slide_left);
                 finish();
                 return true;
