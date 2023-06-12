@@ -39,7 +39,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-public class MenuActivity extends AppCompatActivity {
+public class MenuActivity extends AppCompatActivity
+{
     private static final String TAG = "MENU";
     private Handler handler;
     private String username;
@@ -54,6 +55,7 @@ public class MenuActivity extends AppCompatActivity {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setSelectedItemId(R.id.home);
 
+        // Listener for the bottom navigation bar
         bottomNavigationView.setOnItemSelectedListener(item ->
         {
             final int id = item.getItemId();
@@ -100,6 +102,7 @@ public class MenuActivity extends AppCompatActivity {
         uploadData.setOnClickListener(v -> OpenFileChooser());
     }
 
+    // onPause, save the activity stats and the username
     @Override
     protected void onPause()
     {
@@ -107,6 +110,7 @@ public class MenuActivity extends AppCompatActivity {
         saveActivityStats();
     }
 
+    // onResume, load the activity stats and the username, then update the UI
     @Override
     protected void onResume()
     {
@@ -115,6 +119,7 @@ public class MenuActivity extends AppCompatActivity {
         updateUI(activityStats,username);
     }
 
+    // Save the activity stats and the username when the activity is destroyed or stopped
     private void saveActivityStats()
     {
         SharedPreferences mPrefs = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
@@ -128,6 +133,7 @@ public class MenuActivity extends AppCompatActivity {
         prefsEditor.apply();
     }
 
+    // Load the activity stats and the username when the activity is created or resumed
     private void loadActivityStats()
     {
         // Retrieve the object from the shared preferences
@@ -186,6 +192,7 @@ public class MenuActivity extends AppCompatActivity {
         distanceView.setText(String.format("%.2f", stats.getDistance()) + " km");
     }
 
+    // Update the UI with the activity stats and the username
     private void updateUI(ActivityStats stats,String username)
     {
         Log.e(TAG, "Updating the UI");
@@ -209,6 +216,7 @@ public class MenuActivity extends AppCompatActivity {
         }
     }
 
+    // Called when the user has selected a file from the file chooser
     public void onActivityResult(int REQUEST_CODE, int RESULT_CODE, Intent data)
     {
         super.onActivityResult(REQUEST_CODE, RESULT_CODE, data);
@@ -322,6 +330,7 @@ public class MenuActivity extends AppCompatActivity {
         }
     }
 
+    // Send a notification to the user that the data is ready
     private void sendNotification(String usernameString)
     {
         // Create the notification channel if the SDK version is 26 or higher

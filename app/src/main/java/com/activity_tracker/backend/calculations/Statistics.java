@@ -22,15 +22,16 @@ import java.util.*;
  */
 public class Statistics implements Serializable
 {
-    // The total number of routes recorded,
+    // Assigns a version number to the serializable class for compatibility during deserialization.
     private static final long serialVersionUID = 1L;
+    // The total number of routes recorded,
     private int routesRecorded;
     private double totalDistance;
     private double totalElevation;
     private double totalActivityTime;
 
     // userStats: A hashmap matching each user to their respective statistics.
-    private final HashMap<String, UserStatistics> userStats;
+    private HashMap<String, UserStatistics> userStats = new HashMap<>();
 
     // segmentStatistics: Matches the hashcode (integer) of a segment name, to a leaderboard of user stats for that segment
     private HashMap<Integer, SegmentLeaderboard> segmentStatistics = new HashMap<>();
@@ -40,7 +41,6 @@ public class Statistics implements Serializable
      */
     public Statistics()
     {
-        this.userStats = new HashMap<>();
         this.routesRecorded = 0;
         this.totalDistance = 0;
         this.totalElevation = 0;
@@ -53,6 +53,10 @@ public class Statistics implements Serializable
         }
     }
 
+    /**
+     * Copy constructor for the Statistics class.
+     * @param other The Statistics object to copy.
+     */
     public Statistics(Statistics other)
     {
         this.routesRecorded = other.routesRecorded;
@@ -60,15 +64,9 @@ public class Statistics implements Serializable
         this.totalElevation = other.totalElevation;
         this.totalActivityTime = other.totalActivityTime;
 
-        // Copy the userStats hashmap
+        // Copying the user stats and segment stats
         this.userStats = new HashMap<>(other.userStats);
-
-        // Copy the segmentStatistics hashmap
-        this.segmentStatistics = new HashMap<>(other.segmentStatistics.size());
-        for (Map.Entry<Integer, SegmentLeaderboard> entry : other.segmentStatistics.entrySet()) {
-            SegmentLeaderboard leaderboard = new SegmentLeaderboard(entry.getValue().getTrimmedFileName());
-            this.segmentStatistics.put(entry.getKey(), leaderboard);
-        }
+        this.segmentStatistics = new HashMap<>(other.segmentStatistics);
     }
 
     /**
@@ -121,21 +119,6 @@ public class Statistics implements Serializable
         this.totalDistance += userStatistics.getTotalDistance();
         this.totalElevation += userStatistics.getTotalElevation();
         this.totalActivityTime += userStatistics.getTotalActivityTime();
-    }
-
-    /**
-     * Retrieves the leaderboard for a specific segment.
-     *
-     * @param segmentHashID The hash of the segment.
-     * @return The leaderboard for the segment.
-     */
-    public SegmentLeaderboard getLeaderboard(int segmentHashID)
-    {
-        if (!segmentStatistics.containsKey(segmentHashID))
-        {
-            throw new RuntimeException("Could not find the segment.");
-        }
-        return segmentStatistics.get(segmentHashID);
     }
 
     /**
@@ -287,8 +270,8 @@ public class Statistics implements Serializable
     }
 
     /**
-     * Called when closing the connection with the user, creates the statistics file and writes the statistics for all users to it.
-     * also for each segment, creates a new xml file and writes the statistics for that segment to it of the users who have completed it.
+     * Called when master closes the connection with the user. Creates the statistics file and writes the statistics for
+     * all users to it. Also, creates a new xml file for each segment and writes the statistics for that segment to it.
      */
     public void createFile()
     {
@@ -471,6 +454,11 @@ public class Statistics implements Serializable
         return userStats.get(user).getAverageActivityTime();
     }
 
+    /**
+     * Calculates the average distance for all users by dividing
+     * the total distance of all users by the number of users.
+     * @return the average distance for all users
+     */
     public double getAverageDistances()
     {
         if (userStats.size() == 0)
@@ -485,6 +473,11 @@ public class Statistics implements Serializable
         return total / userStats.size();
     }
 
+    /**
+     *  Calculates the average elevation for all users by dividing
+     *  the total elevation of all users by the number of users.
+     * @return the average elevation for all users
+     */
     public double getAverageElevations()
     {
         if (userStats.size() == 0)
@@ -499,6 +492,11 @@ public class Statistics implements Serializable
         return total / userStats.size();
     }
 
+    /**
+     *  Calculates the average activity time for all users by dividing
+     *  the total activity time of all users by the number of users.
+     * @return the average activity time for all users
+     */
     public double getAverageActivityTimes()
     {
         if (userStats.size() == 0)

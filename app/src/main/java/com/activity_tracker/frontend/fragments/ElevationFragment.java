@@ -1,18 +1,9 @@
 package com.activity_tracker.frontend.fragments;
 
-import android.content.Intent;
 import android.graphics.Color;
-import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
-import androidx.appcompat.widget.AppCompatImageButton;
-import com.activity_tracker.R;
 import com.activity_tracker.backend.calculations.Statistics;
-import com.activity_tracker.frontend.ProfileActivity;
+
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
@@ -27,12 +18,12 @@ import java.util.List;
 public class ElevationFragment extends BaseChartFragment
 {
 
-    @Override
-    protected int getLayoutResource()
+    public ElevationFragment()
     {
-        return R.layout.fragment_chart_base;
+        // Required empty public constructor
     }
-
+    // Creates the bar chart for the elevation fragment
+    // that compares the user's elevation to the average elevation
     @Override
     protected BarChart createBarChart(Statistics statistics)
     {
@@ -82,7 +73,8 @@ public class ElevationFragment extends BaseChartFragment
         return chart;
     }
 
-
+    // Updates the elevation info for the user
+    // compared to the average elevation
     private void updateElevationInfo(Statistics statistics)
     {
         double userElevation = statistics.getUserStats(username).getTotalElevation();
@@ -93,7 +85,7 @@ public class ElevationFragment extends BaseChartFragment
         String infoText;
         if (percentage > 0)
         {
-            infoText = "Your overall elevation is greater than " + String.format("%.2f", percentage) + "% of users!";
+            infoText = "Your overall elevation is above average by " + String.format("%.2f", percentage) + "%.";
         }
         else if (percentage < 0)
         {

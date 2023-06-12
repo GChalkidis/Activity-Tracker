@@ -23,12 +23,8 @@ public class ActivityTimeFragment extends BaseChartFragment
         // Required empty public constructor
     }
 
-    @Override
-    protected int getLayoutResource()
-    {
-        return R.layout.fragment_chart_base;
-    }
-
+    // Creates the bar chart for the activity time fragment
+    // that compares the user's activity time to the average activity time
     @Override
     protected BarChart createBarChart(Statistics statistics)
     {
@@ -46,7 +42,6 @@ public class ActivityTimeFragment extends BaseChartFragment
         labels.add("Your Activity Time");
         labels.add("Average Activity Time");
 
-        // Create a LegendEntry for each color
         List<LegendEntry> legendEntries = new ArrayList<>();
         for (int i = 0; i < dataSet.getColors().size(); i++)
         {
@@ -56,7 +51,6 @@ public class ActivityTimeFragment extends BaseChartFragment
             legendEntries.add(entry);
         }
 
-        // Set the custom legend entries
         Legend legend = chart.getLegend();
         legend.setCustom(legendEntries);
 
@@ -78,6 +72,8 @@ public class ActivityTimeFragment extends BaseChartFragment
         return chart;
     }
 
+    // Updates the text view that displays information about the user's activity time
+    // compared to the average activity time
     private void updateActivityTimeInfo(Statistics statistics)
     {
         double userActivityTime = statistics.getUserStats(username).getTotalActivityTime();
@@ -88,7 +84,7 @@ public class ActivityTimeFragment extends BaseChartFragment
         String infoText;
         if (percentage > 0)
         {
-            infoText = "Your overall activity time is greater than " + String.format("%.2f", percentage) + "% of users!";
+            infoText = "Your overall activity time is above average by " + String.format("%.2f", percentage) + "%.";
         }
         else if (percentage < 0)
         {

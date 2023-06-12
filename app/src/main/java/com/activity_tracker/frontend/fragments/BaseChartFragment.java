@@ -85,6 +85,7 @@ public abstract class BaseChartFragment extends Fragment
     }
 
 
+    // Navigates to the profile activity when the back button is pressed
     private void navigateToProfile()
     {
         Intent intent = new Intent(getActivity(), ProfileActivity.class);
@@ -93,7 +94,13 @@ public abstract class BaseChartFragment extends Fragment
         getActivity().finish();
     }
 
-    protected abstract int getLayoutResource();
+    // Abstract method to get the layout resource, can also be implemented here
+    protected int getLayoutResource()
+    {
+        return R.layout.fragment_chart_base;
+    }
 
+
+    // Abstract method to create the chart, implemented by subclasses to create different charts
     protected abstract BarChart createBarChart(Statistics statistics);
 }

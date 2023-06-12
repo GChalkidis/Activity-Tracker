@@ -73,13 +73,13 @@ public class ProfileActivity extends AppCompatActivity
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
         toggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.black));
+
+        // Listen for clicks on the navigation drawer
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 final int id = item.getItemId();
                 if (R.id.activity_time_item == id) {
                     drawerLayout.closeDrawer(GravityCompat.START);
-                    Toast.makeText(ProfileActivity.this, "Activity Time", Toast.LENGTH_SHORT).show();
-
                     // Pass the statistics variable to the fragment
                     Fragment activityTimeFragment = ActivityTimeFragment.newInstance(statistics,ActivityTimeFragment.class,username);
                     fragmentR(activityTimeFragment);
@@ -87,16 +87,12 @@ public class ProfileActivity extends AppCompatActivity
                 if (R.id.elevation_item == id)
                 {
                     drawerLayout.closeDrawer(GravityCompat.START);
-                    Toast.makeText(ProfileActivity.this, "Elevation Time", Toast.LENGTH_SHORT).show();
-
                     // Pass the statistics variable to the fragment
                     Fragment elevationFragment = ElevationFragment.newInstance(statistics, ElevationFragment.class,username);
                     fragmentR(elevationFragment);
                 }
                 if (R.id.distance_item == id) {
                     drawerLayout.closeDrawer(GravityCompat.START);
-                    Toast.makeText(ProfileActivity.this, "Distance Time", Toast.LENGTH_SHORT).show();
-
                     // Pass the statistics variable to the fragment
                     Fragment distanceFragment = DistanceFragment.newInstance(statistics, DistanceFragment.class,username);
                     fragmentR(distanceFragment);
@@ -106,6 +102,7 @@ public class ProfileActivity extends AppCompatActivity
 
         });
 
+        // Listen for clicks on the bottom navigation bar
         bottomNavigationView.setOnItemSelectedListener(item ->
         {
             final int id = item.getItemId();
@@ -187,6 +184,7 @@ public class ProfileActivity extends AppCompatActivity
         }).start();
     }
 
+    // Replace the fragment in the fragment container
     private void fragmentR(Fragment fragment)
     {
         // Hide other elements before replacing the fragment
@@ -200,9 +198,7 @@ public class ProfileActivity extends AppCompatActivity
         fragmentTransaction.replace(R.id.fragment_container, fragment);
         fragmentTransaction.commit();
     }
-
-
-
+    // Update the UI with the user statistics
     private void updateUI(UserStatistics finalUserStatistics)
     {
         LinearLayout linearLayout = findViewById(R.id.profileStatsContainer);
@@ -223,8 +219,6 @@ public class ProfileActivity extends AppCompatActivity
             noStatsTextView.setVisibility(View.VISIBLE);
         }
     }
-
-
 
     private void setProfileStats(UserStatistics userStatistics)
     {
