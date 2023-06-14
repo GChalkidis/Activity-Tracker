@@ -32,7 +32,7 @@ public class ActivityTimeFragment extends BaseChartFragment
 
         List<BarEntry> entries = new ArrayList<>();
         entries.add(new BarEntry(0, (float) statistics.getUserStats(username).getTotalActivityTime()));
-        entries.add(new BarEntry(1, (float) statistics.getAverageActivityTimes()));
+        entries.add(new BarEntry(1, (float) statistics.getAverageActivityTime()));
 
         BarDataSet dataSet = new BarDataSet(entries, "");
         dataSet.setColors(Color.BLUE, Color.GREEN); // Set the colors of the bars
@@ -42,6 +42,7 @@ public class ActivityTimeFragment extends BaseChartFragment
         labels.add("Your Activity Time");
         labels.add("Average Activity Time");
 
+        // Create a LegendEntry for each color
         List<LegendEntry> legendEntries = new ArrayList<>();
         for (int i = 0; i < dataSet.getColors().size(); i++)
         {
@@ -51,6 +52,7 @@ public class ActivityTimeFragment extends BaseChartFragment
             legendEntries.add(entry);
         }
 
+        // Set the custom legend entries
         Legend legend = chart.getLegend();
         legend.setCustom(legendEntries);
 
@@ -77,18 +79,18 @@ public class ActivityTimeFragment extends BaseChartFragment
     private void updateActivityTimeInfo(Statistics statistics)
     {
         double userActivityTime = statistics.getUserStats(username).getTotalActivityTime();
-        double averageActivityTime = statistics.getAverageActivityTimes();
+        double averageActivityTime = statistics.getAverageActivityTime();
 
         double percentage = (userActivityTime - averageActivityTime) / averageActivityTime * 100;
 
         String infoText;
         if (percentage > 0)
         {
-            infoText = "Your overall activity time is above average by " + String.format("%.2f", percentage) + "%.";
+            infoText = "Your overall activity time is" + String.format("%.2f", percentage) + "% greater than the average user's activity time!";
         }
         else if (percentage < 0)
         {
-            infoText = "Your overall activity time is " + String.format("%.2f", Math.abs(percentage)) + "% below the average.";
+            infoText = "Your overall activity time is " + String.format("%.2f", Math.abs(percentage)) + "% below the average user's activity time.";
         }
         else
         {
