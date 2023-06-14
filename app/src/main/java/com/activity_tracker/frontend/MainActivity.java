@@ -4,8 +4,6 @@ import com.activity_tracker.R;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
@@ -17,7 +15,6 @@ public class MainActivity extends AppCompatActivity
 {
     // Tag for logging
     private static final String TAG = "MainActivity";
-    private Handler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -27,14 +24,11 @@ public class MainActivity extends AppCompatActivity
 
         Button loginButton = findViewById(R.id.login_button);
 
-        handler = new Handler(Looper.getMainLooper());
-
         loginButton.setOnClickListener(v ->
         {
             new Thread(() ->
             {
                 TextView usernameTextView = (TextView) findViewById(R.id.username_title);
-                String username = usernameTextView.getText().toString().toLowerCase();
 
             }).start();
 

@@ -14,13 +14,20 @@ import com.activity_tracker.backend.calculations.Statistics;
 import com.activity_tracker.frontend.ProfileActivity;
 import com.github.mikephil.charting.charts.BarChart;
 
+/*
+   Base class for all fragments that display a chart of the user's statistics.
+ */
 public abstract class BaseChartFragment extends Fragment
 {
     private static final String ARG_STATISTICS = "statistics";
     private static final String ARG_USERNAME = "username";
 
+    // The statistics object that contains the data to be displayed
     private Statistics statistics;
+    // The username of the user whose data is being displayed
     protected String username;
+
+    // The TextView that displays the percentage
     protected TextView percentageView;
 
     public BaseChartFragment()
@@ -28,7 +35,7 @@ public abstract class BaseChartFragment extends Fragment
         // Required empty public constructor
     }
 
-
+    // Creates a new instance of the fragment with the given statistics and fragment class
     public static Fragment newInstance(Statistics statistics, Class<? extends BaseChartFragment> fragmentClass, String username)
     {
         try
