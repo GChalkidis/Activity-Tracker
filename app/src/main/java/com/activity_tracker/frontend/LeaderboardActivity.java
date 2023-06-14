@@ -7,6 +7,7 @@ import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.TableLayout;
+import android.widget.TextView;
 
 import com.activity_tracker.R;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.activity_tracker.backend.calculations.SegmentLeaderboard;
 import com.activity_tracker.frontend.misc.SegmentLeaderboardAdapter;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -156,28 +159,29 @@ public class LeaderboardActivity extends AppCompatActivity
                     e.printStackTrace();
                 }
             }
-
-            // TODO: Update the UI with the leaderboard data
             handler.post(this::updateUI);
-
         }).start();
     }
 
     private void updateUI()
     {
-        // first condition: The segment leaderboards is empty (the user hasn't registered a segment yet)
+        /* if the segment leaderboards is empty (meaning the user hasn't registered a segment yet)
+         * there is no point in doing anything further.         */
         if (segmentLeaderboardsForUser.isEmpty())
         {
             return;
         }
 
-        /* second condition: if the user has registered leaderboards and this is their first time
+        /* if the user has registered leaderboards and this is their first time
          * viewing the leaderboard (hence the no segments text is still visible)          */
         if (findViewById(R.id.no_segments_text).getVisibility() == View.VISIBLE)
         {
             Log.e("LeaderboardActivity", "Updating UI");
 
-            // turn the visibility of the textview associated with the "no segments" text to GONE
+            // initialising currentSegmentIndex to 0
+            currentSegmentIndex = 0;
+
+            // updated the related visibilities
             View noSegmentsText = findViewById(R.id.no_segments_text);
             noSegmentsText.setVisibility(View.GONE);
 
@@ -185,13 +189,55 @@ public class LeaderboardActivity extends AppCompatActivity
             leaderboardLayout.setVisibility(View.VISIBLE);
             leaderboardRecyclerView.setVisibility(View.VISIBLE);
 
-            //View leaderboardRowLayout = findViewById(R.id.leaderboard_row_layout);
-            //leaderboardRowLayout.setVisibility(View.VISIBLE);
+            View leftArrow = findViewById(R.id.left_arrow);
+            leftArrow.setVisibility(View.VISIBLE);
 
-            // initialising currentSegmentIndex to 0
-            currentSegmentIndex = 0;
+            View rightArrow = findViewById(R.id.right_arrow);
+            rightArrow.setVisibility(View.VISIBLE);
+
+            TextView segmentNameTextview = findViewById(R.id.segment_name);
+            segmentNameTextview.setVisibility(View.VISIBLE);
+            segmentNameTextview.setText(segmentLeaderboardsForUser.get(currentSegmentIndex).getTrimmedFileName());
+
+            // set up the recyclerview accordingly
             setUpRecyclerView();
         }
+
+        View leftArrow = findViewById(R.id.left_arrow);
+        View rightArrow = findViewById(R.id.right_arrow);
+        TextView segmentNameTextview = findViewById(R.id.segment_name);
+
+        // set up 2 OnClickListeners for the 2 arrow TextViews, to navigate through the user's segment leaderboards
+        leftArrow.setOnClickListener(v ->
+        {
+            if (currentSegmentIndex == 0)
+            {
+                currentSegmentIndex = segmentLeaderboardsForUser.size() - 1;
+            }
+            else
+            {
+                currentSegmentIndex--;
+            }
+
+            adapter.setUserSegmentStatisticsList(segmentLeaderboardsForUser.get(currentSegmentIndex).getLeaderboard());
+            adapter.notifyDataSetChanged();
+            segmentNameTextview.setText(segmentLeaderboardsForUser.get(currentSegmentIndex).getTrimmedFileName());
+        });
+
+        rightArrow.setOnClickListener(v ->
+        {
+            if (currentSegmentIndex == segmentLeaderboardsForUser.size() - 1)
+            {
+                currentSegmentIndex = 0;
+            }
+            else
+            {
+                currentSegmentIndex++;
+            }
+            adapter.setUserSegmentStatisticsList(segmentLeaderboardsForUser.get(currentSegmentIndex).getLeaderboard());
+            adapter.notifyDataSetChanged();
+            segmentNameTextview.setText(segmentLeaderboardsForUser.get(currentSegmentIndex).getTrimmedFileName());
+        });
 
     }
 
@@ -199,7 +245,7 @@ public class LeaderboardActivity extends AppCompatActivity
     {
         leaderboardRecyclerView.setHasFixedSize(false);
         leaderboardRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new SegmentLeaderboardAdapter(this, segmentLeaderboardsForUser.get(0).getLeaderboard());
+        adapter = new SegmentLeaderboardAdapter(this, segmentLeaderboardsForUser.get(currentSegmentIndex).getLeaderboard());
         leaderboardRecyclerView.setAdapter(adapter);
     }
 }
