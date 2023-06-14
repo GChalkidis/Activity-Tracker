@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button loginButton = (Button) findViewById(R.id.login_button);
+        Button loginButton = findViewById(R.id.login_button);
 
         handler = new Handler(Looper.getMainLooper());
 
@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity
     private void launchMenuActivity(String username)
     {
         Intent intent = new Intent(this, MenuActivity.class);
-        intent.putExtra("username", username);
+        intent.putExtra("EXTRA_USERNAME", username);
         // Popup message to show that the login is successful
         Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show();
         startActivity(intent);

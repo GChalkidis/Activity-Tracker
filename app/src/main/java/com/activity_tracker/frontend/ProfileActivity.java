@@ -60,7 +60,7 @@ public class ProfileActivity extends AppCompatActivity
 
         // Receive the username from the previous activity
         Intent intent = getIntent();
-        this.username = intent.getStringExtra("username");
+        this.username = intent.getStringExtra("EXTRA_USERNAME");
         TextView usernameTextView = findViewById(R.id.profileText);
         usernameTextView.setText("Profile " + username);
         this.handler = new Handler(Looper.getMainLooper());
@@ -120,7 +120,7 @@ public class ProfileActivity extends AppCompatActivity
             else if (R.id.leaderboard == id)
             {
                 Intent i = new Intent(this, LeaderboardActivity.class);
-                i.putExtra("username", username);
+                i.putExtra("EXTRA_USERNAME", username);
                 startActivity(i);
                 overridePendingTransition(R.anim.slide_right, R.anim.slide_left);
                 finish();
@@ -132,13 +132,13 @@ public class ProfileActivity extends AppCompatActivity
         new Thread(() ->
         {
             // Create a new socket connection to the server and ask for the leaderboard data
-            Socket connection = null;
-            ObjectOutputStream out = null;
-            ObjectInputStream in = null;
+            Socket connection;
+            ObjectOutputStream out;
+            ObjectInputStream in;
 
             try
             {
-                connection = new Socket("192.168.1.19", 8890);
+                connection = new Socket("192.168.1.10", 8890);
                 out = new ObjectOutputStream(connection.getOutputStream());
                 // Write the username to the server.
                 out.writeObject(username);
@@ -212,7 +212,8 @@ public class ProfileActivity extends AppCompatActivity
 
             setProfileStats(finalUserStatistics);
             noStatsTextView.setVisibility(View.GONE);
-        } else
+        }
+        else
         {
             Log.e(TAG, "updateUI: UserStatistics object is null");
             // UserStatistics object is null, display the "No statistics available" message

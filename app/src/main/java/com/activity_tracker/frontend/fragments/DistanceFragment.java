@@ -1,7 +1,7 @@
 package com.activity_tracker.frontend.fragments;
 
 import android.graphics.Color;
-
+import com.activity_tracker.R;
 import com.activity_tracker.backend.calculations.Statistics;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.Description;
@@ -32,7 +32,7 @@ public class DistanceFragment extends BaseChartFragment
         // Create a list of bar entries
         List<BarEntry> entries = new ArrayList<>();
         entries.add(new BarEntry(0, (float) statistics.getUserStats(username).getTotalDistance()));
-        entries.add(new BarEntry(1, (float) (statistics.getAverageDistances())));
+        entries.add(new BarEntry(1, (float) (statistics.getAverageDistance())));
 
         List<String> labels = new ArrayList<>();
         labels.add("Total Distance");
@@ -50,6 +50,7 @@ public class DistanceFragment extends BaseChartFragment
         legendLabels.add("Your Distance");
         legendLabels.add("Average Distance");
 
+        // Create a LegendEntry for each color
         ArrayList<LegendEntry> legendEntries = new ArrayList<>();
         for (int i = 0; i < dataSet.getColors().size(); i++)
         {
@@ -59,6 +60,7 @@ public class DistanceFragment extends BaseChartFragment
             legendEntries.add(entry);
         }
 
+        // Set the custom legend entries
         Legend legend = chart.getLegend();
         legend.setCustom(legendEntries);
 
@@ -86,18 +88,18 @@ public class DistanceFragment extends BaseChartFragment
     private void updateDistanceInfo(Statistics statistics)
     {
         double userDistance = statistics.getUserStats(username).getTotalDistance();
-        double averageDistance = statistics.getAverageDistances();
+        double averageDistance = statistics.getAverageDistance();
 
         double percentage = (userDistance - averageDistance) / averageDistance * 100;
 
         String infoText;
         if (percentage > 0)
         {
-            infoText = "Your overall distance covered is above average by " + String.format("%.2f", percentage) + "%.";
+            infoText = "Your overall distance recorded is " + String.format("%.2f", percentage) + "% greater than the average user's distance recorded!";
         }
         else if (percentage < 0)
         {
-            infoText = "Your overall distance is " + String.format("%.2f", Math.abs(percentage)) + "% below the average.";
+            infoText = "Your overall distance recorded is " + String.format("%.2f", Math.abs(percentage)) + "% below the average user's distance recorded.";
         }
         else
         {

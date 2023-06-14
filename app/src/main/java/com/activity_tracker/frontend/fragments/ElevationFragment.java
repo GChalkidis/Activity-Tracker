@@ -31,7 +31,7 @@ public class ElevationFragment extends BaseChartFragment
 
         List<BarEntry> entries = new ArrayList<>();
         entries.add(new BarEntry(0, (float) statistics.getUserStats(username).getTotalElevation()));
-        entries.add(new BarEntry(1, (float) statistics.getAverageElevations()));
+        entries.add(new BarEntry(1, (float) statistics.getAverageElevation()));
 
         BarDataSet dataSet = new BarDataSet(entries, "");
         dataSet.setColors(Color.BLUE, Color.GREEN);
@@ -78,22 +78,23 @@ public class ElevationFragment extends BaseChartFragment
     private void updateElevationInfo(Statistics statistics)
     {
         double userElevation = statistics.getUserStats(username).getTotalElevation();
-        double averageElevation = statistics.getAverageElevations();
+        double averageElevation = statistics.getAverageElevation();
 
         double percentage = (userElevation - averageElevation) / averageElevation * 100;
 
         String infoText;
+
         if (percentage > 0)
         {
-            infoText = "Your overall elevation is above average by " + String.format("%.2f", percentage) + "%.";
+            infoText = "Your overall elevation recorded is " + String.format("%.2f", percentage) + "% greater than the average user's elevation recorded!";
         }
         else if (percentage < 0)
         {
-            infoText = "Your overall elevation is " + String.format("%.2f", Math.abs(percentage)) + "% below the average.";
+            infoText = "Your overall elevation recorded is " + String.format("%.2f", Math.abs(percentage)) + "% below the average user's distance recorded.";
         }
         else
         {
-            infoText = "Your overall elevation is on par with the average.";
+            infoText = "Your overall elevation recorded is on par with the average.";
         }
         percentageView.setText(infoText);
     }

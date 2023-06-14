@@ -32,7 +32,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="Activity Time"
+                android:text="@string/stats_card_activity_time"
                 android:textColor="#FFFFFF"
                 android:textSize="16sp" />
 
@@ -64,7 +64,7 @@
                 android:layout_width="77dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="Elevation"
+                android:text="@string/stats_card_elevation"
                 android:textColor="#FFFFFF"
                 android:textSize="16sp" />
 
@@ -96,7 +96,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="Average Speed"
+                android:text="@string/stats_card_average_speed"
                 android:textColor="#FFFFFF"
                 android:textSize="16sp" />
 
@@ -128,7 +128,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="Total Distance"
+                android:text="@string/stats_card_total_distance"
                 android:textColor="#FFFFFF"
                 android:textSize="16sp" />
 

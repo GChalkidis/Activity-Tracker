@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:stretchColumns="1, 2, 3"
+    android:id="@+id/leaderboard_row_layout">
+
+    <TableRow>
+        <TextView
+            android:id="@+id/leaderboard_rank_textview"
+            android:textSize="14sp"
+            android:padding="10dp"
+            android:gravity="center"
+            android:layout_column="1"/>
+        <TextView
+            android:id="@+id/leaderboard_username_textview"
+            android:textSize="14sp"
+            android:padding="10dp"
+            android:gravity="center"
+            android:layout_column="1"/>
+        <TextView
+            android:id="@+id/leaderboard_time_textview"
+            android:textSize="14sp"
+            android:padding="10dp"
+            android:gravity="center"
+            android:layout_column="1"/>
+    </TableRow>
+
+</TableLayout>

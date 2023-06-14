@@ -11,16 +11,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.MediaStore;
+import android.provider.OpenableColumns;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -66,7 +70,7 @@ public class MenuActivity extends AppCompatActivity
             else if (R.id.profile == id)
             {
                 Intent intent = new Intent(this, ProfileActivity.class);
-                intent.putExtra("username", username);
+                intent.putExtra("EXTRA_USERNAME", username);
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_right, R.anim.slide_left);
                 finish();
@@ -75,7 +79,7 @@ public class MenuActivity extends AppCompatActivity
             else if (R.id.leaderboard == id)
             {
                 Intent intent = new Intent(this, LeaderboardActivity.class);
-                intent.putExtra("username", username);
+                intent.putExtra("EXTRA_USERNAME", username);
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_right, R.anim.slide_left);
                 finish();
@@ -88,7 +92,7 @@ public class MenuActivity extends AppCompatActivity
         Bundle username = getIntent().getExtras();
         if (username != null)
         {
-            final String usernameString = username.getString("username");
+            final String usernameString = username.getString("EXTRA_USERNAME");
             Log.e(TAG, "onCreate: " + usernameString);
             this.username = usernameString;
 
@@ -99,7 +103,7 @@ public class MenuActivity extends AppCompatActivity
 
         handler = new Handler(Looper.getMainLooper());
         ImageView uploadData = findViewById(R.id.upload_data);
-        uploadData.setOnClickListener(v -> OpenFileChooser());
+        uploadData.setOnClickListener(v -> openFileChooser());
     }
 
     // onPause, save the activity stats and the username
@@ -145,7 +149,7 @@ public class MenuActivity extends AppCompatActivity
         activityStats = gson.fromJson(json, ActivityStats.class);
 
         // Condition 1: A new user has logged in and there is no saved activity stats
-        if (savedUsername != null && !savedUsername.equals(username) && (username != null && !username.equals("") ))
+        if ((savedUsername != null && !savedUsername.equals(username)) && (username != null && !username.equals("")))
         {
             Log.e(TAG, "No saved activity stats");
             activityStats = null;
@@ -153,7 +157,7 @@ public class MenuActivity extends AppCompatActivity
         }
 
         // Condition 2: The user has logged in again and there are saved activity stats
-        if (savedUsername != null && savedUsername.equals(username) && !username.equals(""))
+        if (savedUsername != null && savedUsername.equals(username) && (username != null && !username.equals("")))
         {
             Log.e(TAG, "Loading saved activity stats");
             this.username = savedUsername;
@@ -217,6 +221,7 @@ public class MenuActivity extends AppCompatActivity
     }
 
     // Called when the user has selected a file from the file chooser
+    @Override
     public void onActivityResult(int REQUEST_CODE, int RESULT_CODE, Intent data)
     {
         super.onActivityResult(REQUEST_CODE, RESULT_CODE, data);
@@ -229,20 +234,21 @@ public class MenuActivity extends AppCompatActivity
             }
             Uri uri = data.getData();
             byte[] fileData = getFileDataFromUri(uri);
+            String fileName = getFileNameFromUri(uri);
             Log.e(TAG, data.getData().toString());
 
             Log.e(TAG, "Now sending the file to the server");
 
             new Thread(() -> {
-                GPXData gpxdata = new GPXData(fileData);
+                GPXData gpxdata = new GPXData(fileName, fileData);
                 Socket connection = null;
                 ObjectOutputStream out = null;
                 ObjectInputStream in = null;
-                ActivityStats stats = null;
+                Object serverResponse = null;
 
                 try
                 {
-                    connection = new Socket("192.168.1.19", 8890);
+                    connection = new Socket("192.168.1.10", 8890);
                     out = new ObjectOutputStream(connection.getOutputStream());
                     // Send the username to the server
                     out.writeObject(username);
@@ -252,10 +258,7 @@ public class MenuActivity extends AppCompatActivity
                     out.flush();
 
                     in = new ObjectInputStream(connection.getInputStream());
-                    stats = (ActivityStats) in.readObject();
-
-                    // Process the received stats here
-
+                    serverResponse = in.readObject();
                 }
                 catch (IOException | ClassNotFoundException e)
                 {
@@ -288,19 +291,36 @@ public class MenuActivity extends AppCompatActivity
                     }
                 }
 
-                final ActivityStats finalStats = stats;
-                handler.post(() ->
+                if (serverResponse instanceof String)
                 {
-                    // Creating a notification to inform the user that the data is ready
-                    sendNotification(username);
-                    updateUI(finalStats,username);
-                });
+                    if (serverResponse.equals("INVALID"))
+                    {
+                        runOnUiThread(() -> Toast.makeText(this,
+                                "Invalid GPX: You cannot send a GPX registered by a different user!",
+                                Toast.LENGTH_LONG).show());
+                    }
+                    else
+                    {
+                        throw new RuntimeException("Unexpected server response");
+                    }
+                }
+
+                if (serverResponse instanceof ActivityStats)
+                {
+                    ActivityStats stats = (ActivityStats) serverResponse;
+                    handler.post(() ->
+                    {
+                        // Creating a notification to inform the user that the data is ready
+                        sendNotification(fileName);
+                        updateUI(stats, username);
+                    });
+                }
 
             }).start();
         }
     }
 
-    private void OpenFileChooser()
+    private void openFileChooser()
     {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("*/*");
@@ -318,7 +338,8 @@ public class MenuActivity extends AppCompatActivity
 
             byte[] buffer = new byte[4096];
             int bytesRead;
-            while ((bytesRead = inputStream.read(buffer)) != -1) {
+            while ((bytesRead = inputStream.read(buffer)) != -1)
+            {
                 outputStream.write(buffer, 0, bytesRead);
             }
             return outputStream.toByteArray();
@@ -330,8 +351,19 @@ public class MenuActivity extends AppCompatActivity
         }
     }
 
+    private String getFileNameFromUri(Uri uri)
+    {
+        Cursor returnCursor = getContentResolver().query(uri, null, null, null, null);
+        assert returnCursor != null;
+        int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+        returnCursor.moveToFirst();
+        String name = returnCursor.getString(nameIndex);
+        returnCursor.close();
+        return name;
+    }
+
     // Send a notification to the user that the data is ready
-    private void sendNotification(String usernameString)
+    private void sendNotification(String filename)
     {
         // Create the notification channel if the SDK version is 26 or higher
         {
@@ -350,14 +382,15 @@ public class MenuActivity extends AppCompatActivity
         // Build the notification
         NotificationCompat.Builder builder = new NotificationCompat.Builder(MenuActivity.this, "channelData")
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
-                .setContentTitle("Data Ready")
-                .setContentText("The data is ready for " + usernameString)
+                .setContentTitle("The data for your GPX is ready!")
+                .setContentText("Done processing " + filename)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
         Notification notification = builder.build();
 
         // Get permission to post the notification
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(MenuActivity.this);
-        if (ActivityCompat.checkSelfPermission(MenuActivity.this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(MenuActivity.this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED)
+        {
             return;
         }
         // Post the notification

@@ -40,7 +40,8 @@ public abstract class BaseChartFragment extends Fragment
             fragment.setArguments(args);
             return fragment;
         }
-        catch (IllegalAccessException | InstantiationException | java.lang.InstantiationException e) {
+        catch (IllegalAccessException | InstantiationException | java.lang.InstantiationException e)
+        {
             e.printStackTrace();
         }
         return null;
@@ -89,7 +90,7 @@ public abstract class BaseChartFragment extends Fragment
     private void navigateToProfile()
     {
         Intent intent = new Intent(getActivity(), ProfileActivity.class);
-        intent.putExtra("username", username);
+        intent.putExtra("EXTRA_USERNAME", username);
         startActivity(intent);
         getActivity().finish();
     }
