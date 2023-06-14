@@ -197,7 +197,7 @@ public class MenuActivity extends AppCompatActivity
     }
 
     // Update the UI with the activity stats and the username
-    private void updateUI(ActivityStats stats,String username)
+    private void updateUI(ActivityStats stats, String username)
     {
         Log.e(TAG, "Updating the UI");
         if (activityCard == null)
