@@ -5,11 +5,16 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.view.View;
+import android.widget.TableLayout;
 
 import com.activity_tracker.R;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.activity_tracker.backend.calculations.SegmentLeaderboard;
+import com.activity_tracker.frontend.misc.SegmentLeaderboardAdapter;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.IOException;
@@ -25,6 +30,18 @@ public class LeaderboardActivity extends AppCompatActivity
     private Handler handler;
     private String username;
 
+    // the recycler view that represents the leaderboard table
+    private RecyclerView leaderboardRecyclerView;
+
+    // the adapter for our recycler view
+    private SegmentLeaderboardAdapter adapter;
+
+    // all the leaderboards of the segments the user has registered
+    private ArrayList<SegmentLeaderboard> segmentLeaderboardsForUser = new ArrayList<>();
+
+    // represents the index of the leaderboard the user is currently viewing, among the segmentLeaderboardsForUser indices
+    private int currentSegmentIndex = -1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -36,8 +53,14 @@ public class LeaderboardActivity extends AppCompatActivity
 
         // Receive the username from the previous activity
         Intent intent = getIntent();
-        this.username = intent.getStringExtra("username");
+        this.username = intent.getStringExtra("EXTRA_USERNAME");
         Log.e(TAG, "Username: " + username);
+
+        // set the leaderboard's visibility to gone until the user has at least 1 segment registered
+        this.leaderboardRecyclerView = findViewById(R.id.leaderboard_table_recycler_view);
+        leaderboardRecyclerView.setVisibility(View.GONE);
+        TableLayout leaderboardTableLayout = findViewById(R.id.leaderboard_tablelayout);
+        leaderboardTableLayout.setVisibility(View.GONE);
 
         handler = new Handler(Looper.getMainLooper());
 
@@ -54,7 +77,7 @@ public class LeaderboardActivity extends AppCompatActivity
             else if (R.id.profile == id)
             {
                 Intent i = new Intent(this, ProfileActivity.class);
-                i.putExtra("username", username);
+                i.putExtra("EXTRA_USERNAME", username);
                 startActivity(i);
                 overridePendingTransition(R.anim.slide_right, R.anim.slide_left);
                 finish();
@@ -73,29 +96,28 @@ public class LeaderboardActivity extends AppCompatActivity
             Socket connection = null;
             ObjectOutputStream out = null;
             ObjectInputStream in = null;
-            ArrayList<SegmentLeaderboard> leaderboards = null;
 
             try
             {
-                connection = new Socket("192.168.1.19", 8890);
+                connection = new Socket("192.168.1.10", 8890);
                 out = new ObjectOutputStream(connection.getOutputStream());
                 // Write the username to the server
                 out.writeObject(username);
                 out.flush();
                 // Request the leaderboard data
-                out.writeObject("LEADERBOARD");
+                out.writeObject("LEADERBOARDS");
                 out.flush();
 
-
                 in = new ObjectInputStream(connection.getInputStream());
+                out.flush();
+
                 // Receive the leaderboard data
                 Object object = in.readObject();
 
-                // if the object is an ArrayList of SegmentLeaderboards, then cast it to that type
-                // else, the leaderboards is null and will be handled in the updateUI method
+                // if the object is an ArrayList of SegmentLeaderboards, then update segmentLeaderboardsForUser
                 if (object instanceof ArrayList)
                 {
-                    leaderboards = (ArrayList<SegmentLeaderboard>) object;
+                    segmentLeaderboardsForUser = (ArrayList<SegmentLeaderboard>) object;
                 }
 
             }
@@ -128,33 +150,56 @@ public class LeaderboardActivity extends AppCompatActivity
                     {
                         connection.close();
                     }
-                } catch (IOException e)
+                }
+                catch (IOException e)
                 {
                     e.printStackTrace();
                 }
             }
 
-            ArrayList<SegmentLeaderboard> finalLeaderboards = leaderboards;
-            handler.post(() ->
-            {
-                // TODO: Update the UI with the leaderboard data
-                updateUI(finalLeaderboards);
-            });
+            // TODO: Update the UI with the leaderboard data
+            handler.post(this::updateUI);
 
         }).start();
     }
 
-    private void updateUI(ArrayList<SegmentLeaderboard> leaderboards)
+    private void updateUI()
     {
-        if (leaderboards != null)
+        // first condition: The segment leaderboards is empty (the user hasn't registered a segment yet)
+        if (segmentLeaderboardsForUser.isEmpty())
         {
-
+            return;
         }
-        else
+
+        /* second condition: if the user has registered leaderboards and this is their first time
+         * viewing the leaderboard (hence the no segments text is still visible)          */
+        if (findViewById(R.id.no_segments_text).getVisibility() == View.VISIBLE)
         {
-            // TODO: Display a message to the user that there are no leaderboards
+            Log.e("LeaderboardActivity", "Updating UI");
+
+            // turn the visibility of the textview associated with the "no segments" text to GONE
+            View noSegmentsText = findViewById(R.id.no_segments_text);
+            noSegmentsText.setVisibility(View.GONE);
+
+            View leaderboardLayout = findViewById(R.id.leaderboard_tablelayout);
+            leaderboardLayout.setVisibility(View.VISIBLE);
+            leaderboardRecyclerView.setVisibility(View.VISIBLE);
+
+            //View leaderboardRowLayout = findViewById(R.id.leaderboard_row_layout);
+            //leaderboardRowLayout.setVisibility(View.VISIBLE);
+
+            // initialising currentSegmentIndex to 0
+            currentSegmentIndex = 0;
+            setUpRecyclerView();
         }
 
     }
 
+    private void setUpRecyclerView()
+    {
+        leaderboardRecyclerView.setHasFixedSize(false);
+        leaderboardRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new SegmentLeaderboardAdapter(this, segmentLeaderboardsForUser.get(0).getLeaderboard());
+        leaderboardRecyclerView.setAdapter(adapter);
+    }
 }
