@@ -15,6 +15,10 @@ import com.github.mikephil.charting.data.BarEntry;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+    A fragment that displays the user's distance compared to the average distance of all users
+    in a bar chart.
+*/
 public class DistanceFragment extends BaseChartFragment
 {
     public DistanceFragment()
@@ -89,6 +93,12 @@ public class DistanceFragment extends BaseChartFragment
     {
         double userDistance = statistics.getUserStats(username).getTotalDistance();
         double averageDistance = statistics.getAverageDistance();
+
+        // If the average distance is 0, then there is no data to compare to
+        if (averageDistance == 0)
+        {
+            return;
+        }
 
         double percentage = (userDistance - averageDistance) / averageDistance * 100;
 

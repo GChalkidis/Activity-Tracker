@@ -15,6 +15,10 @@ import com.github.mikephil.charting.data.BarEntry;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+    A fragment that displays the user's elevation compared to the average elevation of all users
+    in a bar chart.
+ */
 public class ElevationFragment extends BaseChartFragment
 {
 
@@ -79,6 +83,12 @@ public class ElevationFragment extends BaseChartFragment
     {
         double userElevation = statistics.getUserStats(username).getTotalElevation();
         double averageElevation = statistics.getAverageElevation();
+
+        // If the average elevation is 0, then there is no data to display
+        if (averageElevation == 0)
+        {
+            return;
+        }
 
         double percentage = (userElevation - averageElevation) / averageElevation * 100;
 

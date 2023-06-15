@@ -2,7 +2,6 @@ package com.activity_tracker.frontend.fragments;
 
 import android.graphics.Color;
 
-import com.activity_tracker.R;
 import com.activity_tracker.backend.calculations.Statistics;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.Description;
@@ -15,6 +14,10 @@ import com.github.mikephil.charting.data.BarEntry;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+    A fragment that displays the user's activity time compared to
+    the average activity time of all users in a bar chart.
+ */
 public class ActivityTimeFragment extends BaseChartFragment
 {
 
@@ -35,7 +38,8 @@ public class ActivityTimeFragment extends BaseChartFragment
         entries.add(new BarEntry(1, (float) statistics.getAverageActivityTime()));
 
         BarDataSet dataSet = new BarDataSet(entries, "");
-        dataSet.setColors(Color.BLUE, Color.GREEN); // Set the colors of the bars
+        // Set the colors of the bars
+        dataSet.setColors(Color.BLUE, Color.GREEN);
 
         // Create labels for the legend
         List<String> labels = new ArrayList<>();
@@ -80,6 +84,12 @@ public class ActivityTimeFragment extends BaseChartFragment
     {
         double userActivityTime = statistics.getUserStats(username).getTotalActivityTime();
         double averageActivityTime = statistics.getAverageActivityTime();
+
+        // If the average activity time is 0, then there is no data to compare to
+        if (averageActivityTime == 0)
+        {
+            return;
+        }
 
         double percentage = (userActivityTime - averageActivityTime) / averageActivityTime * 100;
 

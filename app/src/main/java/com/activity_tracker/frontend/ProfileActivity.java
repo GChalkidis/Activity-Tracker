@@ -18,10 +18,7 @@ import com.activity_tracker.frontend.fragments.ActivityTimeFragment;
 import com.activity_tracker.frontend.fragments.DistanceFragment;
 import com.activity_tracker.frontend.fragments.ElevationFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import android.view.MenuItem;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -45,8 +42,6 @@ public class ProfileActivity extends AppCompatActivity
     private String username;
     private Handler handler;
     private DrawerLayout drawerLayout;
-    private Toolbar toolbar;
-    private NavigationView navigationView;
     private Statistics statistics = null;
 
     @Override
@@ -64,9 +59,9 @@ public class ProfileActivity extends AppCompatActivity
         TextView usernameTextView = findViewById(R.id.profileText);
         usernameTextView.setText("Profile " + username);
         this.handler = new Handler(Looper.getMainLooper());
-        toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         drawerLayout = findViewById(R.id.drawerLayout);
-        navigationView = findViewById(R.id.navigationView);
+        NavigationView navigationView = findViewById(R.id.navigationView);
         navigationView.bringToFront();
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close);
@@ -75,31 +70,28 @@ public class ProfileActivity extends AppCompatActivity
         toggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.black));
 
         // Listen for clicks on the navigation drawer
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                final int id = item.getItemId();
-                if (R.id.activity_time_item == id) {
-                    drawerLayout.closeDrawer(GravityCompat.START);
-                    // Pass the statistics variable to the fragment
-                    Fragment activityTimeFragment = ActivityTimeFragment.newInstance(statistics,ActivityTimeFragment.class,username);
-                    fragmentR(activityTimeFragment);
-                }
-                if (R.id.elevation_item == id)
-                {
-                    drawerLayout.closeDrawer(GravityCompat.START);
-                    // Pass the statistics variable to the fragment
-                    Fragment elevationFragment = ElevationFragment.newInstance(statistics, ElevationFragment.class,username);
-                    fragmentR(elevationFragment);
-                }
-                if (R.id.distance_item == id) {
-                    drawerLayout.closeDrawer(GravityCompat.START);
-                    // Pass the statistics variable to the fragment
-                    Fragment distanceFragment = DistanceFragment.newInstance(statistics, DistanceFragment.class,username);
-                    fragmentR(distanceFragment);
-                }
-                return false;
+        navigationView.setNavigationItemSelectedListener(item -> {
+            final int id = item.getItemId();
+            if (R.id.activity_time_item == id) {
+                drawerLayout.closeDrawer(GravityCompat.START);
+                // Pass the statistics variable to the fragment
+                Fragment activityTimeFragment = ActivityTimeFragment.newInstance(statistics,ActivityTimeFragment.class,username);
+                changeFragment(activityTimeFragment);
             }
-
+            if (R.id.elevation_item == id)
+            {
+                drawerLayout.closeDrawer(GravityCompat.START);
+                // Pass the statistics variable to the fragment
+                Fragment elevationFragment = ElevationFragment.newInstance(statistics, ElevationFragment.class,username);
+                changeFragment(elevationFragment);
+            }
+            if (R.id.distance_item == id) {
+                drawerLayout.closeDrawer(GravityCompat.START);
+                // Pass the statistics variable to the fragment
+                Fragment distanceFragment = DistanceFragment.newInstance(statistics, DistanceFragment.class,username);
+                changeFragment(distanceFragment);
+            }
+            return false;
         });
 
         // Listen for clicks on the bottom navigation bar
@@ -176,6 +168,7 @@ public class ProfileActivity extends AppCompatActivity
             }
             Log.e(TAG, "onCreate: " + username);
             final UserStatistics finalUserStatistics = statistics.getUserStats(username);
+            // Update the UI with the user statistics
             handler.post(() ->
             {
                 updateUI(finalUserStatistics);
@@ -185,7 +178,7 @@ public class ProfileActivity extends AppCompatActivity
     }
 
     // Replace the fragment in the fragment container
-    private void fragmentR(Fragment fragment)
+    private void changeFragment(Fragment fragment)
     {
         // Hide other elements before replacing the fragment
         LinearLayout linearLayout = findViewById(R.id.profileStatsContainer);
@@ -193,11 +186,13 @@ public class ProfileActivity extends AppCompatActivity
         linearLayout.setVisibility(View.GONE);
         noStatsTextView.setVisibility(View.GONE);
 
+        // Replace the fragment in the fragment container
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, fragment);
         fragmentTransaction.commit();
     }
+
     // Update the UI with the user statistics
     private void updateUI(UserStatistics finalUserStatistics)
     {
@@ -221,6 +216,7 @@ public class ProfileActivity extends AppCompatActivity
         }
     }
 
+    // Set the profile stats on the profile stats view
     private void setProfileStats(UserStatistics userStatistics)
     {
         TextView textViewRoutesRecorded = findViewById(R.id.textViewRoutesRecorded);
