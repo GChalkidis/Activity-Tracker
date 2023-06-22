@@ -91,6 +91,7 @@ public class Master
                     clientMap.put(clientID, clientHandler);
                     Thread clientThread = new Thread(clientHandler);
                     clientThread.start();
+
                 }
                 catch (Exception e)
                 {

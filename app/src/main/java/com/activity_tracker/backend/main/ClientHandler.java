@@ -97,7 +97,7 @@ public class ClientHandler implements Runnable
     {
         try
         {
-            this.clientUsername = (String) in.readObject(); // Receive the username from the client
+            String username = (String) in.readObject(); // Receive the username from the client
 
             while (!clientSocket.isClosed())
             {
@@ -110,7 +110,7 @@ public class ClientHandler implements Runnable
                     Route route = GPXParser.parseRoute(gpxContent, segments);
 
                     // if the user who sent the GPX is not the same as the one who registered the GPX, send an error message to frontend
-                    if (!clientUsername.equals(route.getUser()))
+                    if (!username.equals(route.getUser()))
                     {
                         out.writeObject("INVALID");
                         out.flush();
@@ -131,7 +131,7 @@ public class ClientHandler implements Runnable
                     if (service.equals("LEADERBOARDS"))
                     {
                         // Handle the leaderboard request
-                        ArrayList<SegmentLeaderboard> leaderboards = statistics.getSegmentLeaderboardsForUser(clientUsername);
+                        ArrayList<SegmentLeaderboard> leaderboards = statistics.getSegmentLeaderboardsForUser(username);
                         out.writeObject(leaderboards);
                         out.flush();
                         System.err.println("Leaderboard sent!");
@@ -157,6 +157,7 @@ public class ClientHandler implements Runnable
         }
         catch (IOException e)
         {
+            shutdown();
             System.out.println("Client disconnected");
         }
     }
@@ -300,15 +301,10 @@ public class ClientHandler implements Runnable
      */
     private void shutdown()
     {
-        if (clientUsername != null)
+        System.out.println("ClientHandler: Saving statistics for user " + clientUsername);
+        synchronized (statistics)
         {
-            System.out.println("ClientHandler: Saving statistics for user " + clientUsername);
-            synchronized (statistics)
-            {
-                statistics.createFile();
-            }
-            // Remove the client from the list of connected clients
-            connectedClients.remove(clientUsername);
+            statistics.createFile();
         }
         try
         {

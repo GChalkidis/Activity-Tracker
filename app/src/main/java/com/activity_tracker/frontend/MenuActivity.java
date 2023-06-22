@@ -248,7 +248,7 @@ public class MenuActivity extends AppCompatActivity
 
                 try
                 {
-                    connection = new Socket("192.168.1.10", 8890);
+                    connection = new Socket("192.168.1.19", 8890);
                     out = new ObjectOutputStream(connection.getOutputStream());
                     // Send the username to the server
                     out.writeObject(username);
