@@ -7,76 +7,84 @@
     android:layout_height="match_parent"
     tools:context=".frontend.ProfileActivity">
 
-    <FrameLayout
-        android:id="@+id/fragment_container"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:background="#E7E3ED"
-            android:orientation="vertical">
+            android:elevation="3dp"
+            app:titleTextColor="@color/black">
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#E7E3ED"
-                android:elevation="3dp"
-                app:titleTextColor="@color/black">
+        </androidx.appcompat.widget.Toolbar>
 
-            </androidx.appcompat.widget.Toolbar>
+        <FrameLayout
+            android:id="@+id/fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/profileText"
-                android:layout_width="210dp"
-                android:layout_height="wrap_content"
-                android:text="@string/profileText"
-                android:textSize="24sp" />
-
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#E7E3ED">
+                android:background="#E7E3ED"
+                android:orientation="vertical">
 
-                <com.google.android.material.bottomnavigation.BottomNavigationView
-                    android:id="@+id/bottomNavigationView"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/profileText"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="#E8E6E6"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:menu="@menu/bottom_nav_menu" />
+                    android:layout_marginStart="30dp"
+                    android:text="@string/profileText"
+                    android:textSize="24sp" />
 
-                <LinearLayout
-                    android:id="@+id/profileStatsContainer"
-                    android:layout_width="409dp"
-                    android:layout_height="497dp"
-                    android:layout_marginTop="28dp"
-                    android:orientation="vertical"
-                    android:padding="16dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#E7E3ED">
 
-                    <TextView
-                        android:id="@+id/noStatsTextView"
+                    <com.google.android.material.bottomnavigation.BottomNavigationView
+                        android:id="@+id/bottomNavigationView"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:text="No statistics available"
-                        android:textSize="20sp"
-                        android:visibility="gone" />
-                </LinearLayout>
+                        android:layout_height="wrap_content"
+                        android:background="#E8E6E6"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:menu="@menu/bottom_nav_menu" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    <LinearLayout
+                        android:id="@+id/profileStatsContainer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="0dp"
+                        android:orientation="vertical"
+                        android:padding="16dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
 
-        </LinearLayout>
+                        <TextView
+                            android:id="@+id/noStatsTextView"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:text="@string/no_statistics_text"
+                            android:textSize="20sp"
+                            android:visibility="gone" />
+                    </LinearLayout>
 
-    </FrameLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </LinearLayout>
+
+        </FrameLayout>
+
+    </LinearLayout>
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigationView"

@@ -15,7 +15,8 @@ import com.activity_tracker.frontend.ProfileActivity;
 import com.github.mikephil.charting.charts.BarChart;
 
 /*
-   Base class for all fragments that display a chart of the user's statistics.
+ * Base class for all fragments that display a chart of the user's statistics.
+ * TODO: Check how the charts behave when values have a large deviation
  */
 public abstract class BaseChartFragment extends Fragment
 {

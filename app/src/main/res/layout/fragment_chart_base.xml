@@ -8,7 +8,7 @@
     <FrameLayout
         android:id="@+id/chartContainer"
         android:layout_width="match_parent"
-        android:layout_height="505dp"
+        android:layout_height="300dp"
         android:layout_centerInParent="true" />
 
     <ImageButton
@@ -20,7 +20,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="122dp"
         android:background="@android:color/transparent"
-        android:contentDescription="Back Button"
+        android:contentDescription="@string/back_button"
         android:src="@drawable/ic_back" />
 
     <TextView

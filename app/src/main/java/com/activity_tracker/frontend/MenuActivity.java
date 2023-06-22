@@ -16,7 +16,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.util.Log;
 import android.view.Gravity;
@@ -248,7 +247,7 @@ public class MenuActivity extends AppCompatActivity
 
                 try
                 {
-                    connection = new Socket("192.168.1.19", 8890);
+                    connection = new Socket("192.168.1.10", 8890);
                     out = new ObjectOutputStream(connection.getOutputStream());
                     // Send the username to the server
                     out.writeObject(username);
