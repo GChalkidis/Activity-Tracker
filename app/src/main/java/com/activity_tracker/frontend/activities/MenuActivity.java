@@ -1,4 +1,4 @@
-package com.activity_tracker.frontend;
+package com.activity_tracker.frontend.activities;
 
 import com.activity_tracker.R;
 
@@ -103,6 +103,15 @@ public class MenuActivity extends AppCompatActivity
         handler = new Handler(Looper.getMainLooper());
         ImageView uploadData = findViewById(R.id.upload_data);
         uploadData.setOnClickListener(v -> openFileChooser());
+        ImageView logoutButton = findViewById(R.id.logout_button);
+        logoutButton.setOnClickListener(v ->
+        {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.slide_right, R.anim.slide_left);
+            finish();
+        });
+
     }
 
     // onPause, save the activity stats and the username

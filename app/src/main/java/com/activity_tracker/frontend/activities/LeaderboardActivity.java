@@ -1,4 +1,4 @@
-package com.activity_tracker.frontend;
+package com.activity_tracker.frontend.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -217,7 +217,7 @@ public class LeaderboardActivity extends AppCompatActivity
                 currentSegmentIndex--;
             }
 
-            adapter.setUserSegmentStatisticsList(segmentLeaderboardsForUser.get(currentSegmentIndex).getLeaderboard());
+            adapter.setUserSegmentStatisticsLeaderboard(segmentLeaderboardsForUser.get(currentSegmentIndex).getLeaderboard());
             adapter.notifyDataSetChanged();
             segmentNameTextview.setText(segmentLeaderboardsForUser.get(currentSegmentIndex).getTrimmedFileName());
         });
@@ -232,7 +232,7 @@ public class LeaderboardActivity extends AppCompatActivity
             {
                 currentSegmentIndex++;
             }
-            adapter.setUserSegmentStatisticsList(segmentLeaderboardsForUser.get(currentSegmentIndex).getLeaderboard());
+            adapter.setUserSegmentStatisticsLeaderboard(segmentLeaderboardsForUser.get(currentSegmentIndex).getLeaderboard());
             adapter.notifyDataSetChanged();
             segmentNameTextview.setText(segmentLeaderboardsForUser.get(currentSegmentIndex).getTrimmedFileName());
         });

@@ -2,7 +2,6 @@ package com.activity_tracker.frontend.misc;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +14,7 @@ import com.activity_tracker.R;
 import com.activity_tracker.backend.calculations.UserSegmentStatistics;
 
 import java.util.ArrayList;
-import java.util.TreeSet;
+import java.util.Collection;
 
 public class SegmentLeaderboardAdapter extends RecyclerView.Adapter<SegmentLeaderboardAdapter.ViewHolder>
 {
@@ -28,26 +27,15 @@ public class SegmentLeaderboardAdapter extends RecyclerView.Adapter<SegmentLeade
         this.userSegmentStatisticsList = new ArrayList<>();
     }
 
-    public SegmentLeaderboardAdapter(Context context, ArrayList<UserSegmentStatistics> userSegmentStatisticsList)
+    public SegmentLeaderboardAdapter(Context context, Collection<UserSegmentStatistics> userSegmentStatistics)
     {
         this.context = context;
-        this.userSegmentStatisticsList = new ArrayList<>(userSegmentStatisticsList);
+        this.userSegmentStatisticsList = new ArrayList<>(userSegmentStatistics);
     }
 
-    public SegmentLeaderboardAdapter(Context context, TreeSet<UserSegmentStatistics> userSegmentStatisticsSet)
+    public void setUserSegmentStatisticsLeaderboard(Collection<UserSegmentStatistics> userSegmentStatistics)
     {
-        this.context = context;
-        this.userSegmentStatisticsList = new ArrayList<>(userSegmentStatisticsSet);
-    }
-
-    public void setUserSegmentStatisticsList(TreeSet<UserSegmentStatistics> userSegmentStatisticsList)
-    {
-        this.userSegmentStatisticsList = new ArrayList<>(userSegmentStatisticsList);
-    }
-
-    public void setUserSegmentStatisticsList(ArrayList<UserSegmentStatistics> userSegmentStatisticsList)
-    {
-        this.userSegmentStatisticsList = new ArrayList<>(userSegmentStatisticsList);
+        this.userSegmentStatisticsList = new ArrayList<>(userSegmentStatistics);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder
@@ -63,10 +51,6 @@ public class SegmentLeaderboardAdapter extends RecyclerView.Adapter<SegmentLeade
             rankTextview = itemView.findViewById(R.id.leaderboard_rank_textview);
             usernameTextview = itemView.findViewById(R.id.leaderboard_username_textview);
             timeTextview = itemView.findViewById(R.id.leaderboard_time_textview);
-
-            Log.e("SegmentLeaderboardAdapter", "rankTextview: " + rankTextview);
-            Log.e("SegmentLeaderboardAdapter", "usernameTextview: " + usernameTextview);
-            Log.e("SegmentLeaderboardAdapter", "timeTextview: " + timeTextview);
         }
     }
 
@@ -76,7 +60,6 @@ public class SegmentLeaderboardAdapter extends RecyclerView.Adapter<SegmentLeade
     {
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.leaderboard_row_layout, parent, false);
-        Log.e("SegmentLeaderboardAdapter", "Inflating layout file: " + view);
         return new ViewHolder(view);
     }
 

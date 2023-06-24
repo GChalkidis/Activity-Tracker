@@ -11,7 +11,7 @@ import android.widget.TextView;
 import androidx.appcompat.widget.AppCompatImageButton;
 import com.activity_tracker.R;
 import com.activity_tracker.backend.calculations.Statistics;
-import com.activity_tracker.frontend.ProfileActivity;
+import com.activity_tracker.frontend.activities.ProfileActivity;
 import com.github.mikephil.charting.charts.BarChart;
 
 /*

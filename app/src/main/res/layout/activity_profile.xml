@@ -5,7 +5,7 @@
     android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".frontend.ProfileActivity">
+    tools:context=".frontend.activities.ProfileActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -67,15 +67,6 @@
                         app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
-
-                        <TextView
-                            android:id="@+id/noStatsTextView"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:text="@string/no_statistics_text"
-                            android:textSize="20sp"
-                            android:visibility="gone" />
                     </LinearLayout>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>

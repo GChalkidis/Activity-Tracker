@@ -39,7 +39,7 @@ public class ActivityTimeFragment extends BaseChartFragment
 
         BarDataSet dataSet = new BarDataSet(entries, "");
         // Set the colors of the bars
-        dataSet.setColors(Color.BLUE, Color.GREEN);
+        dataSet.setColors(Color.parseColor("#1577af"), Color.parseColor("#9e00ff"));
 
         // Create labels for the legend
         List<String> labels = new ArrayList<>();
@@ -96,7 +96,7 @@ public class ActivityTimeFragment extends BaseChartFragment
         String infoText;
         if (percentage > 0)
         {
-            infoText = "Your overall activity time is" + String.format("%.2f", percentage) + "% greater than the average user's activity time!";
+            infoText = "Your overall activity time is " + String.format("%.2f", percentage) + "% greater than the average user's activity time!";
         }
         else if (percentage < 0)
         {

@@ -1,4 +1,4 @@
-package com.activity_tracker.frontend;
+package com.activity_tracker.frontend.activities;
 
 import com.activity_tracker.R;
 

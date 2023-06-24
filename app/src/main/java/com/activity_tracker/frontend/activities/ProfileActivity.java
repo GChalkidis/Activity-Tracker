@@ -1,4 +1,4 @@
-package com.activity_tracker.frontend;
+package com.activity_tracker.frontend.activities;
 
 import com.activity_tracker.R;
 
@@ -170,9 +170,7 @@ public class ProfileActivity extends AppCompatActivity
             final UserStatistics finalUserStatistics = statistics.getUserStats(username);
             // Update the UI with the user statistics
             handler.post(() ->
-            {
-                updateUI(finalUserStatistics);
-            });
+                    updateUI(finalUserStatistics));
 
         }).start();
     }
@@ -182,9 +180,7 @@ public class ProfileActivity extends AppCompatActivity
     {
         // Hide other elements before replacing the fragment
         LinearLayout linearLayout = findViewById(R.id.profileStatsContainer);
-        TextView noStatsTextView = findViewById(R.id.noStatsTextView);
         linearLayout.setVisibility(View.GONE);
-        noStatsTextView.setVisibility(View.GONE);
 
         // Replace the fragment in the fragment container
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -197,7 +193,6 @@ public class ProfileActivity extends AppCompatActivity
     private void updateUI(UserStatistics finalUserStatistics)
     {
         LinearLayout linearLayout = findViewById(R.id.profileStatsContainer);
-        TextView noStatsTextView = findViewById(R.id.noStatsTextView);
 
         if (finalUserStatistics != null)
         {
@@ -206,13 +201,6 @@ public class ProfileActivity extends AppCompatActivity
             linearLayout.addView(profileStats);
 
             setProfileStats(finalUserStatistics);
-            noStatsTextView.setVisibility(View.GONE);
-        }
-        else
-        {
-            Log.e(TAG, "updateUI: UserStatistics object is null");
-            // UserStatistics object is null, display the "No statistics available" message
-            noStatsTextView.setVisibility(View.VISIBLE);
         }
     }
 

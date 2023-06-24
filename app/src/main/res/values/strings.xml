@@ -22,4 +22,5 @@
     <string name="close">Close</string>
     <string name="no_statistics_text">No statistics available</string>
     <string name="back_button">Back Button</string>
+    <string name="log_out">Log Out</string>
 </resources>

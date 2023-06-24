@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#E7E3ED"
-    tools:context=".frontend.MainActivity">
+    tools:context=".frontend.activities.MainActivity">
 
     <Button
         android:id="@+id/login_button"
@@ -14,7 +14,7 @@
         android:layout_marginStart="160dp"
         android:layout_marginTop="58dp"
         android:layout_marginEnd="163dp"
-        android:layout_marginBottom="416dp"
+        android:layout_marginBottom="375dp"
         android:text="@string/loginButtonText"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -45,9 +45,9 @@
         android:layout_width="354dp"
         android:layout_height="91dp"
         android:layout_marginStart="50dp"
-        android:layout_marginTop="198dp"
+        android:layout_marginTop="220dp"
         android:layout_marginEnd="57dp"
-        android:layout_marginBottom="58dp"
+        android:layout_marginBottom="50dp"
         android:hint="@string/usernameTitleText"
         android:textColorHint="#37474F"
         app:layout_constraintBottom_toTopOf="@+id/login_button"

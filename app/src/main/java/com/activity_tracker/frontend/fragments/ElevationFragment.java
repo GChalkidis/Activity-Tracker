@@ -38,7 +38,7 @@ public class ElevationFragment extends BaseChartFragment
         entries.add(new BarEntry(1, (float) statistics.getAverageElevation()));
 
         BarDataSet dataSet = new BarDataSet(entries, "");
-        dataSet.setColors(Color.BLUE, Color.GREEN);
+        dataSet.setColors(Color.parseColor("#1577af"), Color.parseColor("#9e00ff"));
 
         // Set labels for the legend
         ArrayList<String> labels = new ArrayList<>();

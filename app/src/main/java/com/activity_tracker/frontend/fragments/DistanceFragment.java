@@ -45,7 +45,7 @@ public class DistanceFragment extends BaseChartFragment
         // Create a dataset for the bar entries
         BarDataSet dataSet = new BarDataSet(entries, "");
 
-        dataSet.setColors(Color.BLUE, Color.GREEN);
+        dataSet.setColors(Color.parseColor("#1577af"), Color.parseColor("#9e00ff"));
         dataSet.setLabel("Distance");
         dataSet.setValueTextColor(Color.BLACK);
 
