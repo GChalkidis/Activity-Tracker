@@ -124,13 +124,13 @@ public class ProfileActivity extends AppCompatActivity
         new Thread(() ->
         {
             // Create a new socket connection to the server and ask for the leaderboard data
-            Socket connection;
-            ObjectOutputStream out;
-            ObjectInputStream in;
+            Socket connection = null;
+            ObjectOutputStream out = null;
+            ObjectInputStream in = null;
 
             try
             {
-                connection = new Socket("192.168.1.10", 8890);
+                connection = new Socket("192.168.1.19", 8890);
                 out = new ObjectOutputStream(connection.getOutputStream());
                 // Write the username to the server.
                 out.writeObject(username);
@@ -166,6 +166,29 @@ public class ProfileActivity extends AppCompatActivity
             {
                 throw new RuntimeException(e);
             }
+            finally
+            {
+                try
+                {
+                    if (out != null)
+                    {
+                        out.close();
+                    }
+                    if (in != null)
+                    {
+                        in.close();
+                    }
+                    if (connection != null)
+                    {
+                        connection.close();
+                    }
+                }
+                catch (IOException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+
             Log.e(TAG, "onCreate: " + username);
             final UserStatistics finalUserStatistics = statistics.getUserStats(username);
             // Update the UI with the user statistics
