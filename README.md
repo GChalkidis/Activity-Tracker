@@ -16,7 +16,7 @@ It enables users to add and track their activities in an intuitive and user-frie
 
 • Personal statistics including the number of activities, total distance, and exercise time.
 
-• Segment leaderboards showcasing users' performance rankings from the best to the worst, based on time comparison.
+• Segment leaderboards showcasing user's performance rankings from the best to the worst, based on time comparison.
 
 • Graphical/Visual comparison of user's statistics with other registered users on our system.
 
