@@ -32,6 +32,7 @@ import androidx.core.app.NotificationManagerCompat;
 
 import com.activity_tracker.backend.calculations.ActivityStats;
 import com.activity_tracker.backend.misc.GPXData;
+import com.activity_tracker.frontend.misc.ConfigManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
 
@@ -54,6 +55,8 @@ public class MenuActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
+
+        ConfigManager.loadProperties(getApplicationContext());
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setSelectedItemId(R.id.home);
@@ -254,9 +257,12 @@ public class MenuActivity extends AppCompatActivity
                 ObjectInputStream in = null;
                 Object serverResponse = null;
 
+                String masterIP = ConfigManager.getProperty("master_ip");
+                int master_port = Integer.parseInt(ConfigManager.getProperty("master_port"));
+
                 try
                 {
-                    connection = new Socket("192.168.1.19", 8890);
+                    connection = new Socket(masterIP, master_port);
                     out = new ObjectOutputStream(connection.getOutputStream());
                     // Send the username to the server
                     out.writeObject(username);

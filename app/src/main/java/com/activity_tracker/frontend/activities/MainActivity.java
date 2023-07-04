@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity
 
         Button loginButton = findViewById(R.id.login_button);
 
+
         loginButton.setOnClickListener(v ->
         {
             new Thread(() ->

@@ -15,14 +15,18 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.activity_tracker.backend.calculations.SegmentLeaderboard;
+import com.activity_tracker.frontend.misc.ConfigManager;
 import com.activity_tracker.frontend.misc.SegmentLeaderboardAdapter;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Properties;
 
 
 public class LeaderboardActivity extends AppCompatActivity
@@ -49,6 +53,8 @@ public class LeaderboardActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leaderboard);
 
+        ConfigManager.loadProperties(this);
+
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setSelectedItemId(R.id.leaderboard);
 
@@ -68,24 +74,19 @@ public class LeaderboardActivity extends AppCompatActivity
         bottomNavigationView.setOnItemSelectedListener(item ->
         {
             final int id = item.getItemId();
-            if (R.id.home == id)
-            {
+            if (R.id.home == id) {
                 startActivity(new Intent(getApplicationContext(), MenuActivity.class));
                 overridePendingTransition(R.anim.slide_right, R.anim.slide_left);
                 finish();
                 return true;
-            }
-            else if (R.id.profile == id)
-            {
+            } else if (R.id.profile == id) {
                 Intent i = new Intent(this, ProfileActivity.class);
                 i.putExtra("EXTRA_USERNAME", username);
                 startActivity(i);
                 overridePendingTransition(R.anim.slide_right, R.anim.slide_left);
                 finish();
                 return true;
-            }
-            else if (R.id.leaderboard == id)
-            {
+            } else if (R.id.leaderboard == id) {
                 return true;
             }
             return false;
@@ -93,14 +94,17 @@ public class LeaderboardActivity extends AppCompatActivity
 
         new Thread(() ->
         {
+
             // Create a new socket connection to the server and ask for the leaderboard data
             Socket connection = null;
             ObjectOutputStream out = null;
             ObjectInputStream in = null;
 
-            try
-            {
-                connection = new Socket("192.168.1.19", 8890);
+            String masterIP = ConfigManager.getProperty("master_ip");
+            int master_port = Integer.parseInt(ConfigManager.getProperty("master_port"));
+
+            try {
+                connection = new Socket(masterIP, master_port);
                 out = new ObjectOutputStream(connection.getOutputStream());
                 // Write the username to the server
                 out.writeObject(username);
@@ -116,44 +120,31 @@ public class LeaderboardActivity extends AppCompatActivity
                 Object object = in.readObject();
 
                 // if the object is an ArrayList of SegmentLeaderboards, then update segmentLeaderboardsForUser
-                if (object instanceof ArrayList)
-                {
+                if (object instanceof ArrayList) {
                     segmentLeaderboardsForUser = (ArrayList<SegmentLeaderboard>) object;
                 }
 
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 Log.e(TAG, "Error connecting to server");
                 Log.e(TAG, e.getMessage());
                 e.printStackTrace();
-            }
-            catch (ClassNotFoundException e)
-            {
+            } catch (ClassNotFoundException e) {
                 Log.e(TAG, "Error casting object to ArrayList<SegmentLeaderboard>");
                 throw new RuntimeException(e);
-            }
-            finally
-            {
+            } finally {
                 Log.e(TAG, "Closing resources");
                 // Close resources in the finally block
-                try
-                {
-                    if (in != null)
-                    {
+                try {
+                    if (in != null) {
                         in.close();
                     }
-                    if (out != null)
-                    {
+                    if (out != null) {
                         out.close();
                     }
-                    if (connection != null)
-                    {
+                    if (connection != null) {
                         connection.close();
                     }
-                }
-                catch (IOException e)
-                {
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }

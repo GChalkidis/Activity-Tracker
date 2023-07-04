@@ -17,6 +17,7 @@ import com.activity_tracker.backend.calculations.UserStatistics;
 import com.activity_tracker.frontend.fragments.ActivityTimeFragment;
 import com.activity_tracker.frontend.fragments.DistanceFragment;
 import com.activity_tracker.frontend.fragments.ElevationFragment;
+import com.activity_tracker.frontend.misc.ConfigManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -31,10 +32,12 @@ import com.activity_tracker.backend.calculations.Statistics;
 import com.google.android.material.navigation.NavigationView;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Properties;
 
 public class ProfileActivity extends AppCompatActivity
 {
@@ -52,6 +55,8 @@ public class ProfileActivity extends AppCompatActivity
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setSelectedItemId(R.id.profile);
+
+        ConfigManager.loadProperties(this);
 
         // Receive the username from the previous activity
         Intent intent = getIntent();
@@ -128,9 +133,13 @@ public class ProfileActivity extends AppCompatActivity
             ObjectOutputStream out = null;
             ObjectInputStream in = null;
 
+            String masterIP = ConfigManager.getProperty("master_ip");
+            int master_port = Integer.parseInt(ConfigManager.getProperty("master_port"));
+            Log.e(TAG, "onCreate: " + masterIP + " " + master_port);
+
             try
             {
-                connection = new Socket("192.168.1.19", 8890);
+                connection = new Socket(masterIP, master_port);
                 out = new ObjectOutputStream(connection.getOutputStream());
                 // Write the username to the server.
                 out.writeObject(username);
