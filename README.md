@@ -20,6 +20,10 @@ It enables users to add and track their activities in an intuitive and user-frie
 
 • Graphical/Visual comparison of user's statistics with other registered users on our system.
 
+# Usage
+
+**TBD**
+
 ## Collaborators
 
 - [hvlkk](https://www.github.com/hvlkk)
