@@ -26,8 +26,11 @@ It enables users to add and track their activities in an intuitive and user-frie
 2. Open Android Studio.
 3. Setup the SDK path accordingly in the local properties.
 4. Configure the configuration file:
+
     • Locate the "config.properties" that can be found in the assets folder.
+
     • Update the masters ip accordingly.
+
 5. Add the GPX files to the emulator's file explorer in the Downloads folder (If you are willing to send a file).
 6. Build and run the frontend application
 
