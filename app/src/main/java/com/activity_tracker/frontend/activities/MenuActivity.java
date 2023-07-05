@@ -250,7 +250,8 @@ public class MenuActivity extends AppCompatActivity
 
             Log.e(TAG, "Now sending the file to the server");
 
-            new Thread(() -> {
+            new Thread(() ->
+            {
                 GPXData gpxdata = new GPXData(fileName, fileData);
                 Socket connection = null;
                 ObjectOutputStream out = null;
@@ -258,11 +259,11 @@ public class MenuActivity extends AppCompatActivity
                 Object serverResponse = null;
 
                 String masterIP = ConfigManager.getProperty("master_ip");
-                int master_port = Integer.parseInt(ConfigManager.getProperty("master_port"));
+                int masterPort = Integer.parseInt(ConfigManager.getProperty("master_port"));
 
                 try
                 {
-                    connection = new Socket(masterIP, master_port);
+                    connection = new Socket(masterIP, masterPort);
                     out = new ObjectOutputStream(connection.getOutputStream());
                     // Send the username to the server
                     out.writeObject(username);

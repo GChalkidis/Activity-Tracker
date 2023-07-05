@@ -134,12 +134,12 @@ public class ProfileActivity extends AppCompatActivity
             ObjectInputStream in = null;
 
             String masterIP = ConfigManager.getProperty("master_ip");
-            int master_port = Integer.parseInt(ConfigManager.getProperty("master_port"));
-            Log.e(TAG, "onCreate: " + masterIP + " " + master_port);
+            int masterPort = Integer.parseInt(ConfigManager.getProperty("master_port"));
+            Log.e(TAG, "onCreate: " + masterIP + " " + masterPort);
 
             try
             {
-                connection = new Socket(masterIP, master_port);
+                connection = new Socket(masterIP, masterPort);
                 out = new ObjectOutputStream(connection.getOutputStream());
                 // Write the username to the server.
                 out.writeObject(username);
