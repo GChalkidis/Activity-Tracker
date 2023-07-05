@@ -74,19 +74,24 @@ public class LeaderboardActivity extends AppCompatActivity
         bottomNavigationView.setOnItemSelectedListener(item ->
         {
             final int id = item.getItemId();
-            if (R.id.home == id) {
+            if (R.id.home == id)
+            {
                 startActivity(new Intent(getApplicationContext(), MenuActivity.class));
                 overridePendingTransition(R.anim.slide_right, R.anim.slide_left);
                 finish();
                 return true;
-            } else if (R.id.profile == id) {
+            }
+            else if (R.id.profile == id)
+            {
                 Intent i = new Intent(this, ProfileActivity.class);
                 i.putExtra("EXTRA_USERNAME", username);
                 startActivity(i);
                 overridePendingTransition(R.anim.slide_right, R.anim.slide_left);
                 finish();
                 return true;
-            } else if (R.id.leaderboard == id) {
+            }
+            else if (R.id.leaderboard == id)
+            {
                 return true;
             }
             return false;
@@ -94,17 +99,17 @@ public class LeaderboardActivity extends AppCompatActivity
 
         new Thread(() ->
         {
-
             // Create a new socket connection to the server and ask for the leaderboard data
             Socket connection = null;
             ObjectOutputStream out = null;
             ObjectInputStream in = null;
 
             String masterIP = ConfigManager.getProperty("master_ip");
-            int master_port = Integer.parseInt(ConfigManager.getProperty("master_port"));
+            int masterPort = Integer.parseInt(ConfigManager.getProperty("master_port"));
 
-            try {
-                connection = new Socket(masterIP, master_port);
+            try
+            {
+                connection = new Socket(masterIP, masterPort);
                 out = new ObjectOutputStream(connection.getOutputStream());
                 // Write the username to the server
                 out.writeObject(username);
@@ -114,37 +119,47 @@ public class LeaderboardActivity extends AppCompatActivity
                 out.flush();
 
                 in = new ObjectInputStream(connection.getInputStream());
-                out.flush();
-
                 // Receive the leaderboard data
                 Object object = in.readObject();
 
                 // if the object is an ArrayList of SegmentLeaderboards, then update segmentLeaderboardsForUser
-                if (object instanceof ArrayList) {
+                if (object instanceof ArrayList)
+                {
                     segmentLeaderboardsForUser = (ArrayList<SegmentLeaderboard>) object;
                 }
-
-            } catch (IOException e) {
+            }
+            catch (IOException e)
+            {
                 Log.e(TAG, "Error connecting to server");
                 Log.e(TAG, e.getMessage());
                 e.printStackTrace();
-            } catch (ClassNotFoundException e) {
+            }
+            catch (ClassNotFoundException e)
+            {
                 Log.e(TAG, "Error casting object to ArrayList<SegmentLeaderboard>");
                 throw new RuntimeException(e);
-            } finally {
+            }
+            finally
+            {
                 Log.e(TAG, "Closing resources");
                 // Close resources in the finally block
-                try {
-                    if (in != null) {
+                try
+                {
+                    if (in != null)
+                    {
                         in.close();
                     }
-                    if (out != null) {
+                    if (out != null)
+                    {
                         out.close();
                     }
-                    if (connection != null) {
+                    if (connection != null)
+                    {
                         connection.close();
                     }
-                } catch (IOException e) {
+                }
+                catch (IOException e)
+                {
                     e.printStackTrace();
                 }
             }
