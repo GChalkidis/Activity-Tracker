@@ -2,12 +2,9 @@
 
 ## Brief Overview
 
-This project is a distributed app developed for the course of Distributed Systems (INF507) at AUEB, over the course of the 2022-23 spring semester.
+This project is a distributed app developed for the course of Distributed Systems (INF507 - 3664) at Athens University of Economics and Business, over the course of the 2022-23 spring semester.
 
-The project utilises a simplified version of the MapReduce programming model, with one master node and multiple worker nodes. The workers are used as both map and reduce workers, to simplify the process.
-The user sends gpx files to the master node, which are then mapped to workers for calculations.
-
-The system consists of a frontend mobile application for the UI (which is contained in this project), along with a [backend](https://github.com/kwstaseL/Activity-Tracker-Backend) system for the data analysis.
+The system consists of a frontend mobile application for the UI (contained in this repository), along with a [backend](https://github.com/kwstaseL/Activity-Tracker-Backend) system for the data analysis.
 
 ## Frontend System
 
@@ -21,7 +18,7 @@ It enables users to add activities in the form of gpx files, as well as track th
 
 - Graphical and visual comparisons of the user's statistics with other registered users.
 
-- Segment tracking: The app supports the registration of segments, akin to [Strava](https://www.strava.com/). In the backend system, there is a "registered_segments" directory of gpx files which correspond to segments, which the master registers on initiation of the app. When a user sends a gpx file which contains the specific list of waypoints one or more segments contain, the time it took the user to complete the segment is calculated and their results are placed in a leaderboard for the respective segment. A user can then view all the leaderboards for the segments they have registered.
+- Segment tracking: The app supports the registration of segments, akin to [Strava](https://www.strava.com/). When a user sends a gpx file which contains the specific list of waypoints a segment contains, statistics for the segment are calculated on the backend, and the results are placed in the leaderboard for the respective segment. A user can then view all the leaderboards for the segments they have registered.
 
 ## Usage
 
