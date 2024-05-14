@@ -1,7 +1,6 @@
 package com.activity_tracker.frontend.fragments;
 
 import android.graphics.Color;
-import com.activity_tracker.R;
 import com.activity_tracker.backend.calculations.Statistics;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.Description;
@@ -97,6 +96,12 @@ public class DistanceFragment extends BaseChartFragment
         // If the average distance is 0, then there is no data to compare to
         if (averageDistance == 0)
         {
+            return;
+        }
+
+        if (statistics.getUserStats(username).getRoutesRecorded() == 0)
+        {
+            percentageView.setText("Record some activities to see your progress compared to other users!");
             return;
         }
 

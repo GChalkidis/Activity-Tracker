@@ -91,6 +91,12 @@ public class ActivityTimeFragment extends BaseChartFragment
             return;
         }
 
+        if (statistics.getUserStats(username).getRoutesRecorded() == 0)
+        {
+            percentageView.setText("Record some activities to see your progress compared to other users!");
+            return;
+        }
+
         double percentage = (userActivityTime - averageActivityTime) / averageActivityTime * 100;
 
         String infoText;

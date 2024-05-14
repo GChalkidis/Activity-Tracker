@@ -84,9 +84,15 @@ public class ElevationFragment extends BaseChartFragment
         double userElevation = statistics.getUserStats(username).getTotalElevation();
         double averageElevation = statistics.getAverageElevation();
 
-        // If the average elevation is 0, then there is no data to display
+        // If the average elevation is 0, then there is no data to compare to
         if (averageElevation == 0)
         {
+            return;
+        }
+
+        if (statistics.getUserStats(username).getRoutesRecorded() == 0)
+        {
+            percentageView.setText("Record some activities to see your progress compared to other users!");
             return;
         }
 
