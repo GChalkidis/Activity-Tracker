@@ -29,10 +29,11 @@ It enables users to add activities in the form of gpx files, as well as track th
 5. Configure the configuration file:
 
     • Locate the "config.properties" file, which can be found in the assets folder.
+   
     • Update the "master_IP" and "master_port" attributes accordingly, to reflect the IP and port you are using on the pc that will be used as the master.
 
-6. If you would like to send a file (and not just view existing results), move your GPX files to the Downloads folder of your emulator.
-7. Build and run the frontend application.
+7. If you would like to send a file (and not just view existing results), move your GPX files to the Downloads folder of your emulator.
+8. Build and run the frontend application.
 
 ## Collaborators
 
