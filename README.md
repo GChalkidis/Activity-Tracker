@@ -37,7 +37,7 @@ It enables users to add activities in the form of gpx files, as well as track th
 
 ## Collaborators
 
-- [hvlkk](https://www.github.com/hvlkk)
+- [GChalkidis](https://github.com/GChalkidis)
 - [kwstaseL](https://www.github.com/kwstaseL)
 
 ## License
